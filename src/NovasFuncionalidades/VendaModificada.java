@@ -20,9 +20,13 @@ public class VendaModificada {
 	
 	List<Produto> listaDeProdutos=new ArrayList<Produto>();
 	List<Double> QuantidadeDeProdutos=new ArrayList<Double>();
+	List<Produto> estoque=new ArrayList<Produto>();
 	
 	
-    int IDvenda;
+
+
+
+	int IDvenda;
     int IDvendedor;
     int IDcliente = 0;
     double ValorTotal;
@@ -83,11 +87,7 @@ public class VendaModificada {
         return ValorTotal;
     }
     
-    public void adicionarProduto(Produto produto, double quantidade) {
-    	
-    	throw new UnsupportedOperationException();
-        
-    }
+   
 
 	public List<Produto> getListaDeProdutos() {
 		return listaDeProdutos;
@@ -104,6 +104,42 @@ public class VendaModificada {
 	public void setDataVenda(Date dataVenda) {
 		this.dataVenda = dataVenda;
 	}
+	
+    public List<Double> getQuantidadeDeProdutos() {
+		return QuantidadeDeProdutos;
+	}
+
+	public void setQuantidadeDeProdutos(List<Double> quantidadeDeProdutos) {
+		QuantidadeDeProdutos = quantidadeDeProdutos;
+	}
+	
+	public void adicionarAVenda(Produto produtoParaVenda,double novaQuantidade){
+		
+		throw new UnsupportedOperationException();
+		
+		
+	}
+
+
+	public void removerDaVenda(Produto produtoParaTestarAdd, double quantidade) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	public void finalizarVenda(int idVenda,int vendedor,int  cliente,Date data ) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public List<Produto> getEstoque() {
+		return estoque;
+	}
+
+	public void setEstoque(List<Produto> estoque) {
+		this.estoque = estoque;
+	}
+
+	
 
     
     

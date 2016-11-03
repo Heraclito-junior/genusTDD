@@ -7,9 +7,15 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.activity.InvalidActivityException;
+import javax.management.BadAttributeValueExpException;
+
+import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+
+import com.mysql.fabric.xmlrpc.base.Data;
 
 import NovasFuncionalidades.Desconto;
 import NovasFuncionalidades.FuncionalidadesNovas;
@@ -32,33 +38,22 @@ public class TestePromocoes {
 	
 	List<Produto> listaDeProdutos;
 	List<Desconto>listaDeDescontos;
+	//List<VendaContemPromocao>listaDeVendaContem;
+	List<String>lista;
+	Date dataAtual;
 	
-	private static boolean setUpIsDone = false;
-
-	@SuppressWarnings("deprecation")
-	@Test
-	public void testPromocoesUmProduto() {
-		MockitoAnnotations.initMocks(this);
+	
+	
+    @SuppressWarnings("deprecation")
+	@Before public void initialize() {
+    	MockitoAnnotations.initMocks(this);
+    	listaDeProdutos=new ArrayList<Produto>();
+		listaDeDescontos=new ArrayList<Desconto>();
+		//listaDeVendaContem=new ArrayList<VendaContemPromocao>();
 		
 		Produto auxiliarParaAlocacaoProdutos;
 		Desconto auxiliarParaAlocacaoDesconto;
-		
-		 List<Produto> listaDeProdutos=new ArrayList<Produto>();
-		 List<Desconto> listaDeDescontos=new ArrayList<Desconto>();
-		 
-		 Date dataFicticia=new Date(2016,11,01);
-		 
-		 
-		 List<VendaContemPromocao> listaDeConteudoParaTeste=new ArrayList<VendaContemPromocao>();
-		 
-		 listaDeConteudoParaTeste.add(new VendaContemPromocao(1, 1, 2, 1));
-		 listaDeConteudoParaTeste.add(new VendaContemPromocao(1, 6, 3, 2));
-		 
-		
-		
-		//setUp();
-		
-		
+    	
 		when(novasFuncionalidades.retornarProdutoPorID(1)).thenReturn(new Produto(1, "tomate", 91, 0.5, 1));
 		when(novasFuncionalidades.retornarProdutoPorID(2)).thenReturn(new Produto(2, "laranja", 106, 0.4, 1));
 		when(novasFuncionalidades.retornarProdutoPorID(3)).thenReturn(new Produto(3, "mouse", 30, 20.5, 2));
@@ -93,93 +88,246 @@ public class TestePromocoes {
 		
 		
 		
+		dataAtual=new Date(2016,11,01);
+    	
+       
+    }
+    
+    
+    @Test
+	public void testAdicionarProduto() {
+		VendaModificada vendaTestaAdd=new VendaModificada();
+		vendaTestaAdd.setEstoque(listaDeProdutos);
+		Produto produtoParaTestarAdd=listaDeProdutos.get(3);
+		
+		vendaTestaAdd.adicionarAVenda(produtoParaTestarAdd, 3);
+		assertEquals(vendaTestaAdd.getListaDeProdutos().get(0).getNome(),"mouse");
+		
+	}
+    
+    @Test(expected=BadAttributeValueExpException.class)
+	public void testAdicionarProdutoInexistente() {
+		VendaModificada vendaTestaAdd=new VendaModificada();
+		vendaTestaAdd.setEstoque(listaDeProdutos);
+		Produto produtoParaTestarAdd=listaDeProdutos.get(3);
+		
+		vendaTestaAdd.adicionarAVenda(produtoParaTestarAdd, 3);
+		
+	}
+    
+    
+    @Test(expected=InvalidActivityException.class)
+    public void testAdicionarProdutoInsuficiente() {
+		VendaModificada vendaTestaAdd=new VendaModificada();
+		vendaTestaAdd.setEstoque(listaDeProdutos);
+		Produto produtoParaTestarAdd=listaDeProdutos.get(3);
+		
+		vendaTestaAdd.adicionarAVenda(produtoParaTestarAdd, 1000000);
+		
+	}
+    
+    
+    @Test
+    public void testAdicionarAumentarQuantidadeProduto() {
+		VendaModificada vendaTestaAdd=new VendaModificada();
+		vendaTestaAdd.setEstoque(listaDeProdutos);
+		Produto produtoParaTestarAdd=listaDeProdutos.get(3);
+		
+		vendaTestaAdd.adicionarAVenda(produtoParaTestarAdd, 3);
+		assertEquals(vendaTestaAdd.getQuantidadeDeProdutos().get(0),3,0.001);
+		vendaTestaAdd.adicionarAVenda(produtoParaTestarAdd, 2);
+		assertEquals(vendaTestaAdd.getQuantidadeDeProdutos().get(0),5,0.001);
+		
+	}   
+    
+    @Test    
+	public void testAdicionarVariosProdutos() {
+		VendaModificada vendaTestaAdd=new VendaModificada();
+		vendaTestaAdd.setEstoque(listaDeProdutos);
+		Produto produtoParaTestarAdd=listaDeProdutos.get(2);
+		
+		vendaTestaAdd.adicionarAVenda(produtoParaTestarAdd, 3);
+		assertEquals(vendaTestaAdd.getListaDeProdutos().get(0).getNome(),"mouse");
+		
+		produtoParaTestarAdd=listaDeProdutos.get(2);
+		
+		vendaTestaAdd.adicionarAVenda(produtoParaTestarAdd, 4);
+		assertEquals(vendaTestaAdd.getListaDeProdutos().get(1).getNome(),"laranja");
 		
 		
 		
+	}
+    
+    
+    
+    @Test
+   	public void testRemoverProdutoVenda() {
+   		VendaModificada vendaTestaAdd=new VendaModificada();
+   		Produto produtoParaTestarAdd=listaDeProdutos.get(2);
+   		vendaTestaAdd.setEstoque(listaDeProdutos);
+   		
+   		
+   		vendaTestaAdd.adicionarAVenda(produtoParaTestarAdd, 3);
+   		
+   		produtoParaTestarAdd=listaDeProdutos.get(2);
+   		
+   		vendaTestaAdd.adicionarAVenda(produtoParaTestarAdd, 4);
+   		vendaTestaAdd.removerDaVenda(produtoParaTestarAdd, 3);
+   		
+   		assertEquals(vendaTestaAdd.getListaDeProdutos().get(0).getNome(),"mouse");
+   		assertEquals(vendaTestaAdd.getQuantidadeDeProdutos().get(0),1,0.001);
+   		
+   		
+   		
+   	}
+    
+    @Test(expected=BadAttributeValueExpException.class)
+   	public void testRemoverProdutoInexistente() {
+   		VendaModificada vendaTestaAdd=new VendaModificada();
+   		vendaTestaAdd.setEstoque(listaDeProdutos);
+   		Produto produtoParaTestarAdd=listaDeProdutos.get(2);
+   		
+   		
+   		
+   		vendaTestaAdd.adicionarAVenda(produtoParaTestarAdd, 3);
+   		
+   		produtoParaTestarAdd=listaDeProdutos.get(2);
+   		
+   		vendaTestaAdd.adicionarAVenda(produtoParaTestarAdd, 4);
+   		vendaTestaAdd.removerDaVenda(produtoParaTestarAdd, 3);
+   		
+   		assertEquals(vendaTestaAdd.getListaDeProdutos().get(0).getNome(),"mouse");
+   		assertEquals(vendaTestaAdd.getQuantidadeDeProdutos().get(0),1,0.001);
+   		
+   		
+   		
+   	}
+    
+    @Test(expected=InvalidActivityException.class)
+   	public void testRemoverProdutoInsuficiente() {
+   		VendaModificada vendaTestaAdd=new VendaModificada();
+   		vendaTestaAdd.setEstoque(listaDeProdutos);
+   		Produto produtoParaTestarAdd=listaDeProdutos.get(2);
+   		
+   		
+   		
+   		vendaTestaAdd.adicionarAVenda(produtoParaTestarAdd, 3);
+   		
+   		produtoParaTestarAdd=listaDeProdutos.get(2);
+   		
+   		vendaTestaAdd.adicionarAVenda(produtoParaTestarAdd, 4);
+   		vendaTestaAdd.removerDaVenda(produtoParaTestarAdd, 3);
+   		
+   		assertEquals(vendaTestaAdd.getListaDeProdutos().get(0).getNome(),"mouse");
+   		assertEquals(vendaTestaAdd.getQuantidadeDeProdutos().get(0),1,0.001);
+   		
+   		
+   		
+   	}
+    
+    @Test
+	public void testDiminuirProdutoVenda() {
+		VendaModificada vendaTestaAdd=new VendaModificada();
+		vendaTestaAdd.setEstoque(listaDeProdutos);
+		Produto produtoParaTestarAdd=listaDeProdutos.get(2);
 		
 		
 		
+		vendaTestaAdd.adicionarAVenda(produtoParaTestarAdd, 3);
 		
-		Produto produtoParaVerificar;
-		produtoParaVerificar= listaDeProdutos.get(0);
+		produtoParaTestarAdd=listaDeProdutos.get(2);
 		
-		//when(novasFuncionalidades.calcularDescontoProduto(listaDeProdutos.get(0), listaDeDescontos)).thenReturn(new Produto(1,"tomate",91,0.4,1));
+		vendaTestaAdd.adicionarAVenda(produtoParaTestarAdd, 4);
+		vendaTestaAdd.removerDaVenda(produtoParaTestarAdd, 2.0);
+		
+		assertEquals(vendaTestaAdd.getListaDeProdutos().get(0).getNome(),"mouse");
+		assertEquals(vendaTestaAdd.getQuantidadeDeProdutos().get(0),1,0.001);
 		
 		
 		
-		//produtoParaVerificar=novasFuncionalidades.calcularDescontoProduto(listaDeProdutos.get(0), listaDeDescontos);
+	}
+    
+    @Test    
+	public void testAdicionarProdutoDescontado() {
+		VendaModificada vendaTestaDesconto=new VendaModificada();
+		vendaTestaDesconto.setEstoque(listaDeProdutos);
+		
+		Produto produtoParaTestarDesconto=listaDeProdutos.get(0);
+		
+		FuncionalidadesNovas funcionalidadesTeste= new FuncionalidadesNovas();
+		
+		
+		Produto produtoParaReceberProdutoDescontado=new Produto();
+		produtoParaReceberProdutoDescontado=funcionalidadesTeste.calcularDescontoProduto(produtoParaTestarDesconto, listaDeDescontos);
+		
+		vendaTestaDesconto.adicionarAVenda(produtoParaReceberProdutoDescontado, 3);
+		assertEquals(vendaTestaDesconto.getListaDeProdutos().get(0).getPreco(),0.4,0.001);
 
-				
-		novaVenda=new VendaModificada();
-				
-		when(novasFuncionalidades.adicionarAVenda(produtoParaVerificar, novaVenda, 2)).thenReturn(new VendaModificada(1,1));
-		
-		
-		
-		novaVenda=novasFuncionalidades.adicionarAVenda(produtoParaVerificar, novaVenda,2);
-		
-		
-		produtoParaVerificar= listaDeProdutos.get(5);
-		
-		when(novasFuncionalidades.adicionarAVenda(produtoParaVerificar, novaVenda, 3)).thenReturn(new VendaModificada(1,1));
-		
-		
-		novaVenda=novasFuncionalidades.adicionarAVenda(produtoParaVerificar, novaVenda,3);
-		
-		when(novasFuncionalidades.FinalizarVenda(novaVenda,listaDeDescontos)).thenReturn(new VendaModificada(1,1));
-		
-		
-		when(novaVenda.getValorTotal()).thenReturn(3.5);
-		
-		
-		
-		
-		
-		
-		
-		assertEquals(3.5, novaVenda.getValorTotal(), 0.001);		
-		
-		
-		
-		
-		
 	}
-	
-	
-	
-	
-	
-	
-	public void setUp() {
-	    if (setUpIsDone) {
-	        return;
-	    }
-	    
-	  MockitoAnnotations.initMocks(this);
-	  
-	  Produto auxiliarParaAlocacaoProdutos;
-	  Desconto auxiliarParaAlocacaoDesconto;
-	    
-	  List<Produto> listaDeProdutos=new ArrayList<Produto>();
-	  List<Desconto> listaDeDescontos=new ArrayList<Desconto>();
-	  
-	  
-	  when(novasFuncionalidades.retornarProdutoPorID(1)).thenReturn(new Produto(1, "tomate", 91, 0.5, 1));
-	  when(novasFuncionalidades.retornarDescontoPorID(1)).thenReturn(new Desconto(1,1,0.2,"Liquidacao de Tomate"));
-	  
-	  auxiliarParaAlocacaoProdutos=novasFuncionalidades.retornarProdutoPorID(1);
-	  
-	  listaDeProdutos.add(auxiliarParaAlocacaoProdutos);
-	  
-	  
-	  auxiliarParaAlocacaoDesconto=novasFuncionalidades.retornarDescontoPorID(1);
-	  
-	  listaDeDescontos.add(auxiliarParaAlocacaoDesconto);
-	  
-	  
-	 
-	    setUpIsDone = true;
+    
+    
+    
+    
+    @Test    
+	public void testFinalizarVenda() {
+    	
+    	
+		VendaModificada vendaTestaFinal=new VendaModificada();
+		
+		vendaTestaFinal.setEstoque(listaDeProdutos);
+		
+		Produto produtoParaTestarDesconto=listaDeProdutos.get(0);
+		
+		FuncionalidadesNovas funcionalidadesTeste= new FuncionalidadesNovas();
+
+		
+		Produto produtoParaReceberProdutoDescontado=new Produto();
+		produtoParaReceberProdutoDescontado=funcionalidadesTeste.calcularDescontoProduto(produtoParaTestarDesconto, listaDeDescontos);
+		
+		vendaTestaFinal.adicionarAVenda(produtoParaReceberProdutoDescontado, 3);
+		
+		vendaTestaFinal.finalizarVenda(1, 1, 1, dataAtual);
+		
+		
+		
+		
+		assertEquals(vendaTestaFinal.getValorTotal(),0.4,0.001);
+
 	}
+    
+    
+    @Test    
+	public void testFinalizarVendaContem() {
+    	List <VendaContemPromocao> vendaContem=new ArrayList<VendaContemPromocao>();
+    	
+    	
+		VendaModificada vendaTestaFinal=new VendaModificada();
+		
+		vendaTestaFinal.setEstoque(listaDeProdutos);
+		
+		Produto produtoParaTestarDesconto=listaDeProdutos.get(0);
+		
+		FuncionalidadesNovas funcionalidadesTeste= new FuncionalidadesNovas();
+
+		
+		Produto produtoParaReceberProdutoDescontado=new Produto();
+		produtoParaReceberProdutoDescontado=funcionalidadesTeste.calcularDescontoProduto(produtoParaTestarDesconto, listaDeDescontos);
+		
+		vendaTestaFinal.adicionarAVenda(produtoParaReceberProdutoDescontado, 3);
+		
+		
+		assertEquals(vendaTestaFinal.getValorTotal(),0.4,0.001);
+		
+		vendaContem=funcionalidadesTeste.setarVendaContem(vendaTestaFinal, listaDeDescontos);
+		
+		assertEquals(vendaContem.size(),1);
+		
+
+	}
+    
+    
+    
+    
 	
 	
 	

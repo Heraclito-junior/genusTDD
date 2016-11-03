@@ -35,7 +35,7 @@ public class FuncionalidadesNovas {
 		
 	}
 	
-	public Produto calcularDescontoProduto(Produto listaDeProdutoParaCalcular,List<Desconto> listaDeDescontosParaCalcular){
+	public Produto calcularDescontoProduto(Produto produtoParaCalcular,List<Desconto> listaDeDescontosParaCalcular){
 		
 		throw new UnsupportedOperationException();
 		
@@ -55,6 +55,22 @@ public class FuncionalidadesNovas {
 		
 		
 	}
+	
+	public List<VendaContemPromocao> setarVendaContem(VendaModificada novaVenda,List<Desconto> listaDescontos){
+		
+		throw new UnsupportedOperationException();
+		
+		
+	}
+
+
+	public VendaModificada FinalizarVendaContem(VendaModificada vendaTestaFinal, List<Desconto> listaDeDescontos) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	
 	
 
 	
