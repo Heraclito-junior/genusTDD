@@ -9,6 +9,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.management.BadAttributeValueExpException;
+
+import exception.ProdutoInexistenteException;
+import exception.ProdutoNaoEstaNoCarrinhoException;
+import exception.QuantidadeInsuficienteException;
+import exception.ValorInvalidoException;
 import genus.Tipos.Produto;
 
 /**
@@ -114,19 +120,130 @@ public class VendaModificada {
 	}
 	
 	public void adicionarAVenda(Produto produtoParaVenda,double novaQuantidade){
+		if(novaQuantidade<=0.0){
+			throw new ValorInvalidoException();
+		}
 		
-		throw new UnsupportedOperationException();
+		int localNoCarrinho=-1;
+		Produto produtoParaComparacao=new Produto();
+		int index;
+		int localEstoque=-1;
 		
 		
+		for(int j=0;j<estoque.size();j++){
+			
+			if(estoque.get(j).getIDproduto()==produtoParaVenda.getIDproduto()){
+				localEstoque=j;
+				
+				break;
+			}
+			
+		}
+		if(localEstoque==-1){
+			
+			throw new ProdutoInexistenteException();
+		}else{
+			produtoParaComparacao.setIDproduto(estoque.get(localEstoque).getIDproduto());
+			
+			produtoParaComparacao.setNome(estoque.get(localEstoque).getNome());
+			produtoParaComparacao.setQuantidade(estoque.get(localEstoque).getQuantidade());
+			produtoParaComparacao.setIDCategoria(estoque.get(localEstoque).getIDCategoria());
+			produtoParaComparacao.setPreco(estoque.get(localEstoque).getPreco());
+			
+			
+		}
+		
+		
+		if(novaQuantidade>produtoParaComparacao.getQuantidade()){
+			throw new QuantidadeInsuficienteException();
+		}
+		
+		if(!listaDeProdutos.contains(produtoParaVenda)){
+			listaDeProdutos.add(produtoParaVenda);
+			QuantidadeDeProdutos.add(novaQuantidade);
+			
+			return;
+			
+		}else{
+			localNoCarrinho=listaDeProdutos.indexOf(produtoParaVenda);
+			double quantidadeAtual=QuantidadeDeProdutos.get(localNoCarrinho);
+			if((quantidadeAtual+novaQuantidade)>produtoParaComparacao.getQuantidade()){
+				
+				throw new QuantidadeInsuficienteException();
+			}
+			QuantidadeDeProdutos.set(localNoCarrinho, quantidadeAtual+novaQuantidade);
+			return;
+		}
+
 	}
 
 
-	public void removerDaVenda(Produto produtoParaTestarAdd, double quantidade) {
+	public void removerDaVenda(Produto produtoParaTestarRmv, double quantidade) {
+		
 		// TODO Auto-generated method stub
+		
+		int localNoCarrinho=-1;
+		
+		if(quantidade<=0.0){
+			throw new ValorInvalidoException();
+		}
+		
+		
+		if(!(estoque.contains(produtoParaTestarRmv))){
+			
+			throw new ProdutoInexistenteException();
+		}
+		
+		if(!(listaDeProdutos.contains(produtoParaTestarRmv))){
+			
+			throw new ProdutoNaoEstaNoCarrinhoException();
+		}
+		
+		
+		localNoCarrinho=listaDeProdutos.indexOf(produtoParaTestarRmv);
+		
+		if(quantidade>QuantidadeDeProdutos.get(localNoCarrinho)){
+			throw new QuantidadeInsuficienteException();
+		}else if(quantidade==QuantidadeDeProdutos.get(localNoCarrinho)){
+			
+			
+				listaDeProdutos.remove(localNoCarrinho);
+				QuantidadeDeProdutos.remove(localNoCarrinho);
+				
+				return;
+		}else{
+			
+			double quantidadeAtual=QuantidadeDeProdutos.get(localNoCarrinho);
+			QuantidadeDeProdutos.set(localNoCarrinho, quantidadeAtual-quantidade);
+
+			return;
+		}
+		
+		
+		
 		
 	}
 	
-	public void finalizarVenda(int idVenda,int vendedor,int  cliente,Date data ) {
+	public void finalizarVenda(int idVendaNovo,int vendedorNovo,int  clienteNovo,Date dataNova ) {
+		ValorTotal=0;
+		this.IDvenda=idVendaNovo;
+		this.IDvendedor=vendedorNovo;
+		this.IDcliente=clienteNovo;
+		this.dataVenda=dataNova;
+		
+		
+		
+		for(int i=0;i<listaDeProdutos.size();i++){
+			
+			double precoADDquantidade=(listaDeProdutos.get(i).getPreco())*(QuantidadeDeProdutos.get(i));
+			
+			ValorTotal+=precoADDquantidade;
+		}
+		
+		
+		
+		
+		
 		// TODO Auto-generated method stub
 		
 	}

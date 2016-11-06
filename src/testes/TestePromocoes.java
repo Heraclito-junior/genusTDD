@@ -7,15 +7,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.activity.InvalidActivityException;
-import javax.management.BadAttributeValueExpException;
+
 
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import com.mysql.fabric.xmlrpc.base.Data;
 
 import NovasFuncionalidades.Desconto;
 import NovasFuncionalidades.FuncionalidadesNovas;
@@ -24,6 +22,7 @@ import NovasFuncionalidades.VendaModificada;
 import exception.ProdutoInexistenteException;
 import exception.ProdutoNaoEstaNoCarrinhoException;
 import exception.QuantidadeInsuficienteException;
+import exception.ValorInvalidoException;
 import genus.Funcoes;
 import genus.Tipos.Funcionario;
 import genus.Tipos.Produto;
@@ -107,6 +106,16 @@ public class TestePromocoes {
 		assertEquals(vendaTestaAdd.getListaDeProdutos().get(0).getNome(),"mouse");
 		
 	}
+    @Test(expected=ValorInvalidoException.class)
+	public void testAdicionarProdutoQuantidadeInvalida() {
+		VendaModificada vendaTestaAdd=new VendaModificada();
+		vendaTestaAdd.setEstoque(listaDeProdutos);
+		Produto produtoParaTestarAdd=listaDeProdutos.get(2);
+		
+		vendaTestaAdd.adicionarAVenda(produtoParaTestarAdd, -1);
+		assertEquals(vendaTestaAdd.getListaDeProdutos().get(0).getNome(),"mouse");
+		
+	}
     
     @Test(expected=ProdutoInexistenteException.class)
 	public void testAdicionarProdutoInexistente() {
@@ -128,6 +137,28 @@ public class TestePromocoes {
 		Produto produtoParaTestarAdd=listaDeProdutos.get(2);
 		
 		vendaTestaAdd.adicionarAVenda(produtoParaTestarAdd, 500);
+		
+	}
+    @Test
+    public void testAdicionarProdutoSuficienteNoLimite() {
+    	
+		VendaModificada vendaTestaAdd=new VendaModificada();
+		vendaTestaAdd.setEstoque(listaDeProdutos);
+		Produto produtoParaTestarAdd=listaDeProdutos.get(2);
+		
+		vendaTestaAdd.adicionarAVenda(produtoParaTestarAdd, 29.999);
+		assertEquals(vendaTestaAdd.getQuantidadeDeProdutos().get(0),29.999,0.001);
+		
+	}
+    @Test(expected=QuantidadeInsuficienteException.class)
+    public void testAdicionarProdutoInsuficienteNoLimite() {
+    	
+		VendaModificada vendaTestaAdd=new VendaModificada();
+		vendaTestaAdd.setEstoque(listaDeProdutos);
+		Produto produtoParaTestarAdd=listaDeProdutos.get(2);
+		
+		vendaTestaAdd.adicionarAVenda(produtoParaTestarAdd, 30.010);
+		assertEquals(vendaTestaAdd.getQuantidadeDeProdutos().get(0),30.001,0.001);
 		
 	}
 
@@ -277,6 +308,27 @@ public class TestePromocoes {
 		
 		
 	}
+    @Test(expected=ValorInvalidoException.class)
+	public void testDiminuirValorInvalidoProdutoVenda() {
+		VendaModificada vendaTestaAdd=new VendaModificada();
+		vendaTestaAdd.setEstoque(listaDeProdutos);
+		Produto produtoParaTestarAdd=listaDeProdutos.get(2);
+		
+		
+		
+		vendaTestaAdd.adicionarAVenda(produtoParaTestarAdd, -1);
+		
+		produtoParaTestarAdd=listaDeProdutos.get(3);
+		
+		vendaTestaAdd.adicionarAVenda(produtoParaTestarAdd, 4);
+		vendaTestaAdd.removerDaVenda(produtoParaTestarAdd, 2.0);
+		
+		assertEquals(vendaTestaAdd.getListaDeProdutos().get(0).getNome(),"mouse");
+		assertEquals(vendaTestaAdd.getQuantidadeDeProdutos().get(1),2,0.001);
+		
+		
+		
+	}
     
     @Test    
 	public void testAdicionarProdutoDescontado() {
@@ -301,7 +353,6 @@ public class TestePromocoes {
 		VendaModificada vendaTestaDesconto=new VendaModificada();
 		vendaTestaDesconto.setEstoque(listaDeProdutos);
 		
-		Produto produtoParaTestarDesconto=listaDeProdutos.get(0);
 		
 		FuncionalidadesNovas funcionalidadesTeste= new FuncionalidadesNovas();
 		
@@ -430,16 +481,12 @@ public class TestePromocoes {
 		FuncionalidadesNovas funcionalidadesTeste= new FuncionalidadesNovas();
 		
 		vendaTestaFinal.setEstoque(listaDeProdutos);
-		
 		Produto produtoParaTestarDesconto;
 		Produto produtoParaReceberProdutoDescontado=new Produto();
-		
 		produtoParaTestarDesconto=listaDeProdutos.get(0);
 		
 		produtoParaReceberProdutoDescontado=funcionalidadesTeste.calcularDescontoProduto(produtoParaTestarDesconto, listaDeDescontos,listaDeProdutos);
-		
 		vendaTestaFinal.adicionarAVenda(produtoParaReceberProdutoDescontado, 3);
-		
 		produtoParaTestarDesconto=listaDeProdutos.get(9);
 		
 		
@@ -451,11 +498,18 @@ public class TestePromocoes {
 		
 		assertEquals(vendaTestaFinal.getValorTotal(),52.2,0.001);
 		
+		
 		vendaContem=funcionalidadesTeste.setarVendaContem(vendaTestaFinal, listaDeDescontos);
 		
 		assertEquals(vendaContem.size(),2);
 		
 		assertEquals(vendaContem.get(0).getPrecoDesconto(),0.4,0.001);
+		assertEquals(vendaContem.get(0).getPrecoNormal(),0.5,0.001);
+		assertEquals(vendaContem.get(0).getCodigoPromocional(),1);
+		
+		assertEquals(vendaContem.get(1).getPrecoDesconto(),25.5,0.001);
+		assertEquals(vendaContem.get(1).getPrecoNormal(),25.5,0.001);
+		assertEquals(vendaContem.get(1).getCodigoPromocional(),0);
 		
 
 	}
