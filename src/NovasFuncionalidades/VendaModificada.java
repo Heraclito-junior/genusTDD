@@ -247,6 +247,16 @@ public class VendaModificada {
 		// TODO Auto-generated method stub
 		
 	}
+	public void finalizarVendaComLotes(int idVendaNovo,int vendedorNovo,int  clienteNovo,Date dataNova,List<Lotes> listaDeLotes ) {
+		throw new UnsupportedOperationException();
+		
+		
+		
+		
+		
+		// TODO Auto-generated method stub
+		
+	}
 
 	public List<Produto> getEstoque() {
 		return estoque;

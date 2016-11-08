@@ -84,12 +84,7 @@ public class FuncionalidadesNovas {
 		
 	}
 	
-	public VendaModificada adicionarAVenda(Produto produtoParaVenda,VendaModificada novaVenda,double novaQuantidade){
-		
-		throw new UnsupportedOperationException();
-		 
-		
-	}
+
 	
 
 	
