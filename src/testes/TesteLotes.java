@@ -26,6 +26,7 @@ import NovasFuncionalidades.VendaContemPromocao;
 import NovasFuncionalidades.VendaModificada;
 import NovasFuncionalidades.VendaModificadaLotes;
 import exception.CombProdutoLoteInvalidoException;
+import exception.LoteExpiradoException;
 import exception.ProdutoInexistenteException;
 import exception.ProdutoNaoEstaNoCarrinhoException;
 import exception.QuantidadeInsuficienteException;
@@ -80,7 +81,7 @@ public class TesteLotes {
 		//Nenhum lote
 		when(novasFuncionalidades.retornarLotesPorID(0)).thenReturn(new Lotes(1,0,0,0,0,new Date(1900,01,01),new Date(4000, 01,01) ));
 		//tomate
-		when(novasFuncionalidades.retornarLotesPorID(1)).thenReturn(new Lotes(2,2,91,0,0,new Date(2016,02,05),new Date(2016, 11,9) ));
+		when(novasFuncionalidades.retornarLotesPorID(1)).thenReturn(new Lotes(2,1,91,0,0,new Date(2016,02,05),new Date(2016, 11,9) ));
 		//absorvente
 		when(novasFuncionalidades.retornarLotesPorID(2)).thenReturn(new Lotes(3,7,60,10,0,new Date(2016,05,05),new Date(2017, 12,23)));
 		//analgesico
@@ -118,6 +119,7 @@ public class TesteLotes {
 		}
 		
 		FuncionalidadesNovas funionalidadesParaTeste=new FuncionalidadesNovas();
+		
 		
 		funionalidadesParaTeste.setarLotes(lotesParaEssaInteracao,dataAtual);
 		
@@ -158,6 +160,7 @@ public class TesteLotes {
 		funionalidadesParaTeste.setarLotes(lotesParaEssaInteracao,dataAtual);
 		
 		VendaModificadaLotes vendaTestaFinal=new VendaModificadaLotes();
+		vendaTestaFinal.setDataVenda(dataAtual);
 		
 		
 		funionalidadesParaTeste.setarLotes(lotesParaEssaInteracao, dataAtual);
@@ -179,8 +182,8 @@ public class TesteLotes {
 
 	}
 	
-	@Test    
-	public void venderProdutoSemLote() {
+	@Test(expected=LoteExpiradoException.class)    
+	public void venderAdicionarVendaLoteExpirado() {
     	
     	
 		Lotes lote;
@@ -193,11 +196,14 @@ public class TesteLotes {
 			lotesParaEssaInteracao.add(lote);
 		}
 		
+		
+		
 		FuncionalidadesNovas funionalidadesParaTeste=new FuncionalidadesNovas();
 		
 		funionalidadesParaTeste.setarLotes(lotesParaEssaInteracao,dataAtual);
 		
 		VendaModificadaLotes vendaTestaFinal=new VendaModificadaLotes();
+		vendaTestaFinal.setDataVenda(dataAtual);
 		
 		
 		funionalidadesParaTeste.setarLotes(lotesParaEssaInteracao, dataAtual);
@@ -208,40 +214,22 @@ public class TesteLotes {
 		
 		
 		
-		produtoParaAdicionarVenda=listaDeProdutos.get(0);
-		
-		lote=novasFuncionalidades.retornarLotesPorID(1);
-		
-		vendaTestaFinal.adicionarAVenda(produtoParaAdicionarVenda, 3,lote);
-		
-		
-		produtoParaAdicionarVenda=listaDeProdutos.get(9);
+		produtoParaAdicionarVenda=listaDeProdutos.get(8);
 		
 		lote=novasFuncionalidades.retornarLotesPorID(3);
-
 		
 		
-		vendaTestaFinal.adicionarAVenda(produtoParaAdicionarVenda, 2,lote);
+		vendaTestaFinal.setDataVenda(dataAtual);
 		
-		
-		produtoParaAdicionarVenda=listaDeProdutos.get(5);
-		
-		lote=novasFuncionalidades.retornarLotesPorID(0);
 		
 		vendaTestaFinal.adicionarAVenda(produtoParaAdicionarVenda, 3,lote);
 		
-		vendaTestaFinal.finalizarVendaComLotes(1, 1, 1, dataAtual);
-		
-		
-		assertEquals(57,vendaTestaFinal.getValorTotal(),0.001);
-		
-		
-		assertEquals(lotesParaEssaInteracao.get(1).getQuantidadeAtual(), 88,0.0001);
-		assertEquals(lotesParaEssaInteracao.get(1).getQuantidadeVendida(),3,0.0001);
 		
 
 
 	}
+	
+	
 	
 	
 	
@@ -266,6 +254,7 @@ public class TesteLotes {
 		funionalidadesParaTeste.setarLotes(lotesParaEssaInteracao,dataAtual);
 		
 		VendaModificadaLotes vendaTestaFinal=new VendaModificadaLotes();
+		vendaTestaFinal.setDataVenda(dataAtual);
 		
 		
 		funionalidadesParaTeste.setarLotes(lotesParaEssaInteracao, dataAtual);
@@ -304,8 +293,8 @@ public class TesteLotes {
 		assertEquals(57,vendaTestaFinal.getValorTotal(),0.001);
 		
 		
-		assertEquals(lotesParaEssaInteracao.get(1).getQuantidadeAtual(), 88,0.0001);
-		assertEquals(lotesParaEssaInteracao.get(1).getQuantidadeVendida(),3,0.0001);
+		assertEquals(vendaTestaFinal.getLotes().get(1).getQuantidadeAtual(), 88,0.0001);
+		assertEquals(vendaTestaFinal.getLotes().get(1).getQuantidadeVendida(), 3.0,0.0001);
 		
 
 
@@ -331,13 +320,16 @@ public class TesteLotes {
 		FuncionalidadesNovas funionalidadesParaTeste=new FuncionalidadesNovas();
 		
 		funionalidadesParaTeste.setarLotes(lotesParaEssaInteracao,dataAtual);
+		
 
 		
 		
 		VendaModificadaLotes vendaTestaFinal=new VendaModificadaLotes();
 		FuncionalidadesNovas funcionalidadesTeste= new FuncionalidadesNovas();
+		vendaTestaFinal.setDataVenda(dataAtual);
 		
 		vendaTestaFinal.setEstoque(listaDeProdutos);
+		vendaTestaFinal.setLotes(lotesParaEssaInteracao);
 		
 		Produto produtoParaAdicionarVenda;
 		
@@ -346,6 +338,7 @@ public class TesteLotes {
 		
 		lote=novasFuncionalidades.retornarLotesPorID(1);
 		
+		
 		vendaTestaFinal.adicionarAVenda(produtoParaAdicionarVenda, 3,lote);
 		
 		
@@ -370,8 +363,15 @@ public class TesteLotes {
 		assertEquals(57,vendaTestaFinal.getValorTotal(),0.001);
 		
 		
-		assertEquals(lotesParaEssaInteracao.get(0).getQuantidadeAtual(), 88,0.0001);
-		assertEquals(lotesParaEssaInteracao.get(0).getQuantidadeVendida(),3,0.0001);
+		assertEquals(vendaTestaFinal.getLotes().get(1).getQuantidadeAtual(), 88,0.0001);
+		assertEquals(vendaTestaFinal.getLotes().get(1).getQuantidadeVendida(), 3.0,0.0001);
+		
+		List<Lotes> listaLotesAtuais=vendaTestaFinal.getLotes();
+		
+		vendaTestaFinal=new VendaModificadaLotes();
+		vendaTestaFinal.setEstoque(listaDeProdutos);
+		vendaTestaFinal.setLotes(listaLotesAtuais);
+		vendaTestaFinal.setDataVenda(dataAtual);
 		
 		produtoParaAdicionarVenda=listaDeProdutos.get(0);
 		
@@ -401,11 +401,12 @@ public class TesteLotes {
 		assertEquals(57,vendaTestaFinal.getValorTotal(),0.001);
 		
 		
-		assertEquals(lotesParaEssaInteracao.get(0).getQuantidadeAtual(), 85.0,0.0001);
-		assertEquals(lotesParaEssaInteracao.get(0).getQuantidadeVendida(),6.0,0.0001);
+		assertEquals(vendaTestaFinal.getLotes().get(1).getQuantidadeAtual(), 85,0.0001);
+		assertEquals(vendaTestaFinal.getLotes().get(1).getQuantidadeVendida(), 6.0,0.0001);
 
 
 	}
+	
 	
 	
 	 

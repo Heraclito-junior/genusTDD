@@ -144,10 +144,17 @@ public class FuncionalidadesNovas {
 		
 	}
 	public void setarLotes(List<Lotes> listaLotes,Date dataAtual){
-
-		
-		throw new UnsupportedOperationException();
-		
+		Date dataFimlote=new Date();
+		double quantidadeAtual;
+		for(int i=0;i<listaLotes.size();i++){
+			dataFimlote=listaLotes.get(i).getDataFimLote();
+			if(dataFimlote.before(dataAtual)){
+				quantidadeAtual=listaLotes.get(i).getQuantidadeAtual();
+				listaLotes.get(i).setQuantidadeAtual(0);
+				listaLotes.get(i).setQuantidadeDesperdicada(quantidadeAtual);
+			}
+		}
+				
 	}
 
 

@@ -11,6 +11,8 @@ import java.util.List;
 
 import javax.management.BadAttributeValueExpException;
 
+import exception.CombProdutoLoteInvalidoException;
+import exception.LoteExpiradoException;
 import exception.ProdutoInexistenteException;
 import exception.ProdutoNaoEstaNoCarrinhoException;
 import exception.QuantidadeInsuficienteException;
@@ -136,6 +138,24 @@ public class VendaModificadaLotes {
 	
 	public void adicionarAVenda(Produto produtoParaVenda,double novaQuantidade,Lotes lote){
 		
+		
+		if(dataVenda.after(lote.getDataFimLote())){
+			throw new LoteExpiradoException();
+		}
+		
+
+		boolean achouPar=false;
+		for(int k=0;k<lotes.size();k++){
+			
+			if(lotes.get(k).getIdProduto()==produtoParaVenda.getIDproduto()&&lotes.get(k).getIdLote()==lote.getIdLote()){
+				achouPar=true;
+			}
+		}
+		
+		if(achouPar==false && lote.getIdLote()!=1){
+			throw new CombProdutoLoteInvalidoException();
+		}
+		
 		if(novaQuantidade<=0.0){
 			throw new ValorInvalidoException();
 		}
@@ -177,7 +197,7 @@ public class VendaModificadaLotes {
 		if(!listaDeProdutos.contains(produtoParaVenda)){
 			listaDeProdutos.add(produtoParaVenda);
 			QuantidadeDeProdutos.add(novaQuantidade);
-			
+			LotesProdutos.add(lote);
 			return;
 			
 		}else{
@@ -225,6 +245,7 @@ public class VendaModificadaLotes {
 			
 				listaDeProdutos.remove(localNoCarrinho);
 				QuantidadeDeProdutos.remove(localNoCarrinho);
+				LotesProdutos.remove(localNoCarrinho);
 				
 				return;
 		}else{
@@ -250,8 +271,7 @@ public class VendaModificadaLotes {
 			
 			for(int j=0;j<estoque.size();j++){
 				if(listaDeProdutos.get(i).getIDproduto()==estoque.get(j).getIDproduto()){
-					System.out.println(estoque.get(j).getNome());
-					System.out.println(estoque.get(j).getQuantidade());
+					
 					double atual=estoque.get(j).getQuantidade();
 					double noCarinho=QuantidadeDeProdutos.get(i);
 					double diferenca=atual-noCarinho;
@@ -277,7 +297,59 @@ public class VendaModificadaLotes {
 	
 	
 	public void finalizarVendaComLotes(int idVendaNovo,int vendedorNovo,int  clienteNovo,Date dataNova ) {
-		throw new UnsupportedOperationException();
+		
+		ValorTotal=0;
+		this.IDvenda=idVendaNovo;
+		this.IDvendedor=vendedorNovo;
+		this.IDcliente=clienteNovo;
+		this.dataVenda=dataNova;
+		
+		for(int i=0;i<listaDeProdutos.size();i++){
+			
+			for(int j=0;j<LotesProdutos.size();j++){
+				if(LotesProdutos.get(i).getIdLote()==lotes.get(j).getIdLote()){
+					
+					double atual=lotes.get(j).getQuantidadeAtual();
+					double noCarinho=QuantidadeDeProdutos.get(i);
+					double diferenca=atual-noCarinho;
+					Lotes produtoModificado=lotes.get(j);
+					produtoModificado.setQuantidadeAtual(diferenca);
+					atual=lotes.get(j).getQuantidadeVendida();
+					diferenca=atual+noCarinho;
+					produtoModificado.setQuantidadeVendida(diferenca);
+					
+				}
+			}
+			
+			
+		}
+		
+		for(int i=0;i<listaDeProdutos.size();i++){
+			
+			
+			for(int j=0;j<estoque.size();j++){
+				if(listaDeProdutos.get(i).getIDproduto()==estoque.get(j).getIDproduto()){
+					
+					double atual=estoque.get(j).getQuantidade();
+					double noCarinho=QuantidadeDeProdutos.get(i);
+					double diferenca=atual-noCarinho;
+					Produto produtoModificado=estoque.get(j);
+					produtoModificado.setQuantidade(diferenca);
+				}
+			}
+			
+			
+		}
+
+		
+		for(int i=0;i<listaDeProdutos.size();i++){
+			
+			double precoADDquantidade=(listaDeProdutos.get(i).getPreco())*(QuantidadeDeProdutos.get(i));
+			
+			ValorTotal+=precoADDquantidade;
+		}
+		
+		
 		
 	}
 
