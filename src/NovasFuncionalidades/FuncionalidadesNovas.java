@@ -144,6 +144,7 @@ public class FuncionalidadesNovas {
 		
 	}
 	public void setarLotes(List<Lotes> listaLotes,Date dataAtual){
+
 		
 		throw new UnsupportedOperationException();
 		

@@ -24,6 +24,8 @@ import NovasFuncionalidades.FuncionalidadesNovas;
 import NovasFuncionalidades.Lotes;
 import NovasFuncionalidades.VendaContemPromocao;
 import NovasFuncionalidades.VendaModificada;
+import NovasFuncionalidades.VendaModificadaLotes;
+import exception.CombProdutoLoteInvalidoException;
 import exception.ProdutoInexistenteException;
 import exception.ProdutoNaoEstaNoCarrinhoException;
 import exception.QuantidadeInsuficienteException;
@@ -75,13 +77,14 @@ public class TesteLotes {
 			
 		}
 		
-		
+		//Nenhum lote
+		when(novasFuncionalidades.retornarLotesPorID(0)).thenReturn(new Lotes(1,0,0,0,0,new Date(1900,01,01),new Date(4000, 01,01) ));
 		//tomate
-		when(novasFuncionalidades.retornarLotesPorID(1)).thenReturn(new Lotes(1,2,91,0,0,new Date(2016,02,05),new Date(2016, 11,9)));
+		when(novasFuncionalidades.retornarLotesPorID(1)).thenReturn(new Lotes(2,2,91,0,0,new Date(2016,02,05),new Date(2016, 11,9) ));
 		//absorvente
-		when(novasFuncionalidades.retornarLotesPorID(2)).thenReturn(new Lotes(2,7,60,10,0,new Date(2016,05,05),new Date(2017, 12,23)));
+		when(novasFuncionalidades.retornarLotesPorID(2)).thenReturn(new Lotes(3,7,60,10,0,new Date(2016,05,05),new Date(2017, 12,23)));
 		//analgesico
-		when(novasFuncionalidades.retornarLotesPorID(3)).thenReturn(new Lotes(2,8,40,10,0,new Date(2016,05,05),new Date(2016, 07,05)));
+		when(novasFuncionalidades.retornarLotesPorID(3)).thenReturn(new Lotes(4,8,40,10,0,new Date(2016,05,05),new Date(2016, 07,05)));
 		
 		
 		
@@ -89,7 +92,7 @@ public class TesteLotes {
 	
 		
 		
-		for(int j=1;j<=3;j++){
+		for(int j=0;j<=3;j++){
 			auxiliarParaAlocacaoDesconto=novasFuncionalidades.retornarLotesPorID(j);
 			listaDeLotes.add(auxiliarParaAlocacaoDesconto);
 			
@@ -108,10 +111,9 @@ public class TesteLotes {
     	
 		Lotes lote;
 		List<Lotes> lotesParaEssaInteracao=new ArrayList<Lotes>();
-		
+
 		for(int i=0;i<listaDeLotes.size();i++){
 			lote=new Lotes(listaDeLotes.get(i));
-			
 			lotesParaEssaInteracao.add(lote);
 		}
 		
@@ -119,29 +121,70 @@ public class TesteLotes {
 		
 		funionalidadesParaTeste.setarLotes(lotesParaEssaInteracao,dataAtual);
 		
-		assertEquals(lotesParaEssaInteracao.get(0).getQuantidadeAtual(), 91,0.0001);
-		assertEquals(lotesParaEssaInteracao.get(0).getQuantidadeVendida(), 0,0.0001);
-		assertEquals(lotesParaEssaInteracao.get(0).getQuantidadeDesperdicada(), 0,0.0001);
-		
-		
-		assertEquals(lotesParaEssaInteracao.get(1).getQuantidadeAtual(), 60,0.0001);
-		assertEquals(lotesParaEssaInteracao.get(1).getQuantidadeVendida(), 10,0.0001);
+		assertEquals(lotesParaEssaInteracao.get(1).getQuantidadeAtual(), 91,0.0001);
+		assertEquals(lotesParaEssaInteracao.get(1).getQuantidadeVendida(), 0,0.0001);
 		assertEquals(lotesParaEssaInteracao.get(1).getQuantidadeDesperdicada(), 0,0.0001);
 		
-		assertEquals(lotesParaEssaInteracao.get(2).getQuantidadeAtual(), 0,0.0001);
+		
+		assertEquals(lotesParaEssaInteracao.get(2).getQuantidadeAtual(), 60,0.0001);
 		assertEquals(lotesParaEssaInteracao.get(2).getQuantidadeVendida(), 10,0.0001);
-		assertEquals(lotesParaEssaInteracao.get(2).getQuantidadeDesperdicada(), 40,0.0001);
+		assertEquals(lotesParaEssaInteracao.get(2).getQuantidadeDesperdicada(), 0,0.0001);
+		
+		assertEquals(lotesParaEssaInteracao.get(3).getQuantidadeAtual(), 0,0.0001);
+		assertEquals(lotesParaEssaInteracao.get(3).getQuantidadeVendida(), 10,0.0001);
+		assertEquals(lotesParaEssaInteracao.get(3).getQuantidadeDesperdicada(), 40,0.0001);
 		
 		
 	}
 	
-	
-	
-	@Test    
-	public void venderLotesTest() {
+	@Test(expected=CombProdutoLoteInvalidoException.class)    
+	public void venderAdicionarVendaLoteInvalido() {
     	
     	
 		Lotes lote;
+		Produto produtoParaAdicionarVenda;
+		List<Lotes> lotesParaEssaInteracao=new ArrayList<Lotes>();
+		
+		for(int i=0;i<listaDeLotes.size();i++){
+			lote=new Lotes(listaDeLotes.get(i));
+			
+			lotesParaEssaInteracao.add(lote);
+		}
+		
+		
+		
+		FuncionalidadesNovas funionalidadesParaTeste=new FuncionalidadesNovas();
+		
+		funionalidadesParaTeste.setarLotes(lotesParaEssaInteracao,dataAtual);
+		
+		VendaModificadaLotes vendaTestaFinal=new VendaModificadaLotes();
+		
+		
+		funionalidadesParaTeste.setarLotes(lotesParaEssaInteracao, dataAtual);
+		
+		vendaTestaFinal.setEstoque(listaDeProdutos);
+		
+		vendaTestaFinal.setLotes(lotesParaEssaInteracao);
+		
+		
+		
+		produtoParaAdicionarVenda=listaDeProdutos.get(0);
+		
+		lote=novasFuncionalidades.retornarLotesPorID(2);
+		
+		vendaTestaFinal.adicionarAVenda(produtoParaAdicionarVenda, 3,lote);
+		
+		
+
+
+	}
+	
+	@Test    
+	public void venderProdutoSemLote() {
+    	
+    	
+		Lotes lote;
+		Produto produtoParaAdicionarVenda;
 		List<Lotes> lotesParaEssaInteracao=new ArrayList<Lotes>();
 		
 		for(int i=0;i<listaDeLotes.size();i++){
@@ -154,42 +197,123 @@ public class TesteLotes {
 		
 		funionalidadesParaTeste.setarLotes(lotesParaEssaInteracao,dataAtual);
 		
-		VendaModificada vendaTestaFinal=new VendaModificada();
-		FuncionalidadesNovas funcionalidadesTeste= new FuncionalidadesNovas();
+		VendaModificadaLotes vendaTestaFinal=new VendaModificadaLotes();
+		
+		
+		funionalidadesParaTeste.setarLotes(lotesParaEssaInteracao, dataAtual);
 		
 		vendaTestaFinal.setEstoque(listaDeProdutos);
 		
-		Produto produtoParaAdicionarVenda;
+		vendaTestaFinal.setLotes(lotesParaEssaInteracao);
+		
+		
 		
 		produtoParaAdicionarVenda=listaDeProdutos.get(0);
 		
-		vendaTestaFinal.adicionarAVenda(produtoParaAdicionarVenda, 3);
+		lote=novasFuncionalidades.retornarLotesPorID(1);
+		
+		vendaTestaFinal.adicionarAVenda(produtoParaAdicionarVenda, 3,lote);
+		
 		
 		produtoParaAdicionarVenda=listaDeProdutos.get(9);
 		
+		lote=novasFuncionalidades.retornarLotesPorID(3);
+
 		
 		
-		vendaTestaFinal.adicionarAVenda(produtoParaAdicionarVenda, 2);
+		vendaTestaFinal.adicionarAVenda(produtoParaAdicionarVenda, 2,lote);
 		
 		
 		produtoParaAdicionarVenda=listaDeProdutos.get(5);
 		
+		lote=novasFuncionalidades.retornarLotesPorID(0);
 		
+		vendaTestaFinal.adicionarAVenda(produtoParaAdicionarVenda, 3,lote);
 		
-		vendaTestaFinal.adicionarAVenda(produtoParaAdicionarVenda, 3);
-		
-		vendaTestaFinal.finalizarVendaComLotes(1, 1, 1, dataAtual,lotesParaEssaInteracao );
+		vendaTestaFinal.finalizarVendaComLotes(1, 1, 1, dataAtual);
 		
 		
 		assertEquals(57,vendaTestaFinal.getValorTotal(),0.001);
 		
 		
-		assertEquals(lotesParaEssaInteracao.get(0).getQuantidadeAtual(), 88,0.0001);
-		assertEquals(lotesParaEssaInteracao.get(0).getQuantidadeVendida(),3,0.0001);
+		assertEquals(lotesParaEssaInteracao.get(1).getQuantidadeAtual(), 88,0.0001);
+		assertEquals(lotesParaEssaInteracao.get(1).getQuantidadeVendida(),3,0.0001);
 		
 
 
 	}
+	
+	
+	
+
+	
+	@Test    
+	public void venderLotesTest() {
+    	
+    	
+		Lotes lote;
+		Produto produtoParaAdicionarVenda;
+		List<Lotes> lotesParaEssaInteracao=new ArrayList<Lotes>();
+		
+		for(int i=0;i<listaDeLotes.size();i++){
+			lote=new Lotes(listaDeLotes.get(i));
+			
+			lotesParaEssaInteracao.add(lote);
+		}
+		
+		FuncionalidadesNovas funionalidadesParaTeste=new FuncionalidadesNovas();
+		
+		funionalidadesParaTeste.setarLotes(lotesParaEssaInteracao,dataAtual);
+		
+		VendaModificadaLotes vendaTestaFinal=new VendaModificadaLotes();
+		
+		
+		funionalidadesParaTeste.setarLotes(lotesParaEssaInteracao, dataAtual);
+		
+		vendaTestaFinal.setEstoque(listaDeProdutos);
+		
+		vendaTestaFinal.setLotes(lotesParaEssaInteracao);
+		
+		
+		
+		produtoParaAdicionarVenda=listaDeProdutos.get(0);
+		
+		lote=novasFuncionalidades.retornarLotesPorID(1);
+		
+		vendaTestaFinal.adicionarAVenda(produtoParaAdicionarVenda, 3,lote);
+		
+		
+		produtoParaAdicionarVenda=listaDeProdutos.get(9);
+		
+		lote=novasFuncionalidades.retornarLotesPorID(0);
+
+		
+		
+		vendaTestaFinal.adicionarAVenda(produtoParaAdicionarVenda, 2,lote);
+		
+		
+		produtoParaAdicionarVenda=listaDeProdutos.get(5);
+		
+		lote=novasFuncionalidades.retornarLotesPorID(0);
+		
+		vendaTestaFinal.adicionarAVenda(produtoParaAdicionarVenda, 3,lote);
+		
+		vendaTestaFinal.finalizarVendaComLotes(1, 1, 1, dataAtual);
+		
+		
+		assertEquals(57,vendaTestaFinal.getValorTotal(),0.001);
+		
+		
+		assertEquals(lotesParaEssaInteracao.get(1).getQuantidadeAtual(), 88,0.0001);
+		assertEquals(lotesParaEssaInteracao.get(1).getQuantidadeVendida(),3,0.0001);
+		
+
+
+	}
+	
+
+	
+	
 	
 	@Test    
 	public void venderLotesTestVariasVendas() {
@@ -210,31 +334,37 @@ public class TesteLotes {
 
 		
 		
-		VendaModificada vendaTestaFinal=new VendaModificada();
+		VendaModificadaLotes vendaTestaFinal=new VendaModificadaLotes();
 		FuncionalidadesNovas funcionalidadesTeste= new FuncionalidadesNovas();
 		
 		vendaTestaFinal.setEstoque(listaDeProdutos);
 		
 		Produto produtoParaAdicionarVenda;
 		
+		
 		produtoParaAdicionarVenda=listaDeProdutos.get(0);
 		
-		vendaTestaFinal.adicionarAVenda(produtoParaAdicionarVenda, 3);
+		lote=novasFuncionalidades.retornarLotesPorID(1);
+		
+		vendaTestaFinal.adicionarAVenda(produtoParaAdicionarVenda, 3,lote);
+		
 		
 		produtoParaAdicionarVenda=listaDeProdutos.get(9);
 		
+		lote=novasFuncionalidades.retornarLotesPorID(0);
+
 		
 		
-		vendaTestaFinal.adicionarAVenda(produtoParaAdicionarVenda, 2);
+		vendaTestaFinal.adicionarAVenda(produtoParaAdicionarVenda, 2,lote);
 		
 		
 		produtoParaAdicionarVenda=listaDeProdutos.get(5);
 		
+		lote=novasFuncionalidades.retornarLotesPorID(0);
 		
+		vendaTestaFinal.adicionarAVenda(produtoParaAdicionarVenda, 3,lote);
 		
-		vendaTestaFinal.adicionarAVenda(produtoParaAdicionarVenda, 3);
-		
-		vendaTestaFinal.finalizarVendaComLotes(1, 1, 1, dataAtual,lotesParaEssaInteracao );
+		vendaTestaFinal.finalizarVendaComLotes(1, 1, 1, dataAtual);
 		
 		
 		assertEquals(57,vendaTestaFinal.getValorTotal(),0.001);
@@ -243,37 +373,34 @@ public class TesteLotes {
 		assertEquals(lotesParaEssaInteracao.get(0).getQuantidadeAtual(), 88,0.0001);
 		assertEquals(lotesParaEssaInteracao.get(0).getQuantidadeVendida(),3,0.0001);
 		
-		vendaTestaFinal=new VendaModificada();
-		
-		funcionalidadesTeste= new FuncionalidadesNovas();
-		
-		vendaTestaFinal.setEstoque(listaDeProdutos);
-		
-		produtoParaAdicionarVenda=new Produto();
-		
 		produtoParaAdicionarVenda=listaDeProdutos.get(0);
 		
-		vendaTestaFinal.adicionarAVenda(produtoParaAdicionarVenda, 3);
+		lote=novasFuncionalidades.retornarLotesPorID(1);
+		
+		vendaTestaFinal.adicionarAVenda(produtoParaAdicionarVenda, 3,lote);
+		
 		
 		produtoParaAdicionarVenda=listaDeProdutos.get(9);
 		
+		lote=novasFuncionalidades.retornarLotesPorID(0);
+
 		
 		
-		vendaTestaFinal.adicionarAVenda(produtoParaAdicionarVenda, 2);
+		vendaTestaFinal.adicionarAVenda(produtoParaAdicionarVenda, 2,lote);
 		
 		
 		produtoParaAdicionarVenda=listaDeProdutos.get(5);
 		
+		lote=novasFuncionalidades.retornarLotesPorID(0);
 		
+		vendaTestaFinal.adicionarAVenda(produtoParaAdicionarVenda, 3,lote);
 		
-		vendaTestaFinal.adicionarAVenda(produtoParaAdicionarVenda, 3);
-		
-		vendaTestaFinal.finalizarVendaComLotes(1, 1, 1, dataAtual,lotesParaEssaInteracao );
+		vendaTestaFinal.finalizarVendaComLotes(1, 1, 1, dataAtual);
 		
 		
 		assertEquals(57,vendaTestaFinal.getValorTotal(),0.001);
 		
-		assertEquals(lotesParaEssaInteracao.get(0).getIdProduto(), 85.0,0.0001);
+		
 		assertEquals(lotesParaEssaInteracao.get(0).getQuantidadeAtual(), 85.0,0.0001);
 		assertEquals(lotesParaEssaInteracao.get(0).getQuantidadeVendida(),6.0,0.0001);
 
@@ -290,3 +417,4 @@ public class TesteLotes {
 	
 
 }
+

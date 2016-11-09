@@ -21,14 +21,21 @@ import genus.Tipos.Produto;
  *
  * @author junior
  */
-public class VendaModificada {
+public class VendaModificadaLotes {
 	
 	
 	List<Produto> listaDeProdutos=new ArrayList<Produto>();
 	List<Double> QuantidadeDeProdutos=new ArrayList<Double>();
+	List<Lotes> LotesProdutos=new ArrayList<Lotes>();
+	
+
+
 	List<Produto> estoque=new ArrayList<Produto>();
+	List<Lotes> lotes=new ArrayList<Lotes>();
 	
 	
+
+
 
 
 
@@ -40,12 +47,12 @@ public class VendaModificada {
 	
 	
 	
-	public VendaModificada() {
+	public VendaModificadaLotes() {
 		
 		
     }
 
-    public VendaModificada(int IDvenda, int IDvendedor) {
+    public VendaModificadaLotes(int IDvenda, int IDvendedor) {
     	
     	
     	
@@ -55,20 +62,20 @@ public class VendaModificada {
         ValorTotal = 0;
     }
 
-    public VendaModificada(int IDvenda, int IDvendedor, double ValorTotal) {
+    public VendaModificadaLotes(int IDvenda, int IDvendedor, double ValorTotal) {
         this.IDvenda = IDvenda;
         this.IDvendedor = IDvendedor;
         this.ValorTotal = ValorTotal;
     }
 
-    public VendaModificada(int IDvenda, int IDvendedor, int IDcliente, double ValorTotal) {
+    public VendaModificadaLotes(int IDvenda, int IDvendedor, int IDcliente, double ValorTotal) {
         this.IDvenda = IDvenda;
         this.IDvendedor = IDvendedor;
         this.ValorTotal = ValorTotal;
         this.IDcliente = IDcliente;
     }
     
-    public VendaModificada(int IDvenda, int IDvendedor, int IDcliente, double ValorTotal,Date novaData) {
+    public VendaModificadaLotes(int IDvenda, int IDvendedor, int IDcliente, double ValorTotal,Date novaData) {
         this.IDvenda = IDvenda;
         this.IDvendedor = IDvendedor;
         
@@ -92,6 +99,14 @@ public class VendaModificada {
         ValorTotal = Math.round(ValorTotal * 100.0) / 100.0;
         return ValorTotal;
     }
+    
+	public List<Lotes> getLotesProdutos() {
+		return LotesProdutos;
+	}
+
+	public void setLotesProdutos(List<Lotes> lotesProdutos) {
+		LotesProdutos = lotesProdutos;
+	}
     
    
 
@@ -119,7 +134,8 @@ public class VendaModificada {
 		QuantidadeDeProdutos = quantidadeDeProdutos;
 	}
 	
-	public void adicionarAVenda(Produto produtoParaVenda,double novaQuantidade){
+	public void adicionarAVenda(Produto produtoParaVenda,double novaQuantidade,Lotes lote){
+		
 		if(novaQuantidade<=0.0){
 			throw new ValorInvalidoException();
 		}
@@ -246,8 +262,7 @@ public class VendaModificada {
 			
 			
 		}
-		
-		
+
 		
 		for(int i=0;i<listaDeProdutos.size();i++){
 			
@@ -256,14 +271,15 @@ public class VendaModificada {
 			ValorTotal+=precoADDquantidade;
 		}
 		
-		
-		
-		
-		
-		// TODO Auto-generated method stub
+
 		
 	}
 	
+	
+	public void finalizarVendaComLotes(int idVendaNovo,int vendedorNovo,int  clienteNovo,Date dataNova ) {
+		throw new UnsupportedOperationException();
+		
+	}
 
 	public List<Produto> getEstoque() {
 		return estoque;
@@ -271,6 +287,15 @@ public class VendaModificada {
 
 	public void setEstoque(List<Produto> estoque) {
 		this.estoque = estoque;
+	}	
+	
+	
+	public List<Lotes> getLotes() {
+		return lotes;
+	}
+
+	public void setLotes(List<Lotes> lotes) {
+		this.lotes = lotes;
 	}
 
 	

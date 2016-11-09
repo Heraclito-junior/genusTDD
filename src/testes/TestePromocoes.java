@@ -391,6 +391,8 @@ public class TestePromocoes {
 		vendaTestaFinal.finalizarVenda(1, 1, 1, dataAtual);
 		
 		
+		assertEquals(88,vendaTestaFinal.getEstoque().get(0).getQuantidade(),0.001);
+		
 		
 		
 		assertEquals(1.2,vendaTestaFinal.getValorTotal(),0.001);
@@ -423,8 +425,10 @@ public class TestePromocoes {
 		
 		vendaTestaFinal.finalizarVenda(1, 1, 1, dataAtual);
 		
+		assertEquals(88,vendaTestaFinal.getEstoque().get(0).getQuantidade(),0.001);
 		
 		
+		assertEquals(97,vendaTestaFinal.getEstoque().get(5).getQuantidade(),0.001);
 		
 		assertEquals(3.9,vendaTestaFinal.getValorTotal(),0.001);
 
@@ -465,6 +469,11 @@ public class TestePromocoes {
 		
 		vendaTestaFinal.finalizarVenda(1, 1, 1, dataAtual);
 		
+		assertEquals(88,vendaTestaFinal.getEstoque().get(0).getQuantidade(),0.001);
+		assertEquals(23,vendaTestaFinal.getEstoque().get(9).getQuantidade(),0.001);		
+		assertEquals(97,vendaTestaFinal.getEstoque().get(5).getQuantidade(),0.001);
+		
+		
 		
 		assertEquals(54.9,vendaTestaFinal.getValorTotal(),0.001);
 		
@@ -502,6 +511,9 @@ public class TestePromocoes {
 		vendaContem=funcionalidadesTeste.setarVendaContem(vendaTestaFinal, listaDeDescontos);
 		
 		assertEquals(vendaContem.size(),2);
+		
+		assertEquals(88,vendaTestaFinal.getEstoque().get(0).getQuantidade(),0.001);
+		assertEquals(23,vendaTestaFinal.getEstoque().get(9).getQuantidade(),0.001);		
 		
 		assertEquals(vendaContem.get(0).getPrecoDesconto(),0.4,0.001);
 		assertEquals(vendaContem.get(0).getPrecoNormal(),0.5,0.001);
