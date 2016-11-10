@@ -93,12 +93,18 @@ public class TesteFaltasFuncionario {
     	FuncionarioModificado funcionarioParaTestar=listaDeFuncionarios.get(1);
 		FuncionalidadesNovas funcionalidadesTest=new FuncionalidadesNovas();
 		List<Faltas> faltasInsercao=new ArrayList<Faltas>(listaFaltas);
-		Date dataTeste=new Date(2016,11,10);
+		Date dataTeste=new Date(2016,11,11);
+		Date a=new Date(2016,12,10);
+		
+		
+		
+		
+		
 		funcionalidadesTest.adicionarFalta(faltasInsercao, funcionarioParaTestar, dataTeste);
 		
 		
 
-		assertEquals(faltasInsercao.get(3).getIdFalta(), 4);
+		assertEquals(faltasInsercao.get(2).getIdFalta(), 3);
 	}
     
     @Test(expected=FuncionarioNaoTrabalhaDiaException.class)     

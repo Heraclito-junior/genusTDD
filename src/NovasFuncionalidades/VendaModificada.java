@@ -234,8 +234,7 @@ public class VendaModificada {
 			
 			for(int j=0;j<estoque.size();j++){
 				if(listaDeProdutos.get(i).getIDproduto()==estoque.get(j).getIDproduto()){
-					System.out.println(estoque.get(j).getNome());
-					System.out.println(estoque.get(j).getQuantidade());
+					
 					double atual=estoque.get(j).getQuantidade();
 					double noCarinho=QuantidadeDeProdutos.get(i);
 					double diferenca=atual-noCarinho;

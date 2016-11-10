@@ -1,6 +1,7 @@
 package testes;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.*
+;
 import static org.mockito.Mockito.*;
 
 import java.text.DateFormat;
@@ -30,7 +31,7 @@ import exception.LoteExpiradoException;
 import exception.ProdutoInexistenteException;
 import exception.ProdutoNaoEstaNoCarrinhoException;
 import exception.QuantidadeInsuficienteException;
-import genus.Funcoes;
+
 import genus.Tipos.Funcionario;
 import genus.Tipos.Produto;
 import genus.Tipos.Venda;
