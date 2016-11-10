@@ -31,6 +31,21 @@ public class FuncionalidadesNovas {
 		
 	}
 	
+	public FuncionarioModificado retornarFuncionarioPorID(int idFunc){
+		
+		throw new UnsupportedOperationException();
+		
+		
+	}
+	
+	public Faltas retornarFaltaPorID(int idFalta){
+		
+		throw new UnsupportedOperationException();
+		
+		
+	}
+	
+	
 	public Desconto retornarDescontoPorID(int idDesconto){
 		
 		throw new UnsupportedOperationException();
@@ -155,6 +170,19 @@ public class FuncionalidadesNovas {
 			}
 		}
 				
+	}
+	
+	public int CalcularDiasTrabalhoNoMes(int ano, int mes, FuncionarioModificado func){
+		throw new UnsupportedOperationException();
+				
+	}
+
+
+	public int CalcularDiasTrabalhoNoMesComFalta(int i, int j, FuncionarioModificado funcionarioParaTestar,
+			List<Faltas> listaFaltas) {
+		throw new UnsupportedOperationException();
+
+		// TODO Auto-generated method stub
 	}
 
 
