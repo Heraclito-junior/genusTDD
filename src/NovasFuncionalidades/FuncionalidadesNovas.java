@@ -5,14 +5,10 @@
  */
 package NovasFuncionalidades;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import exception.FuncionarioNaoTrabalhaDiaException;
 import exception.ProdutoInexistenteException;
 import genus.Tipos.Produto;
 import genus.Tipos.Venda;
@@ -65,7 +61,6 @@ public class FuncionalidadesNovas {
 	}
 	
 	public Produto calcularDescontoProduto(Produto produtoParaCalcular,List<Desconto> listaDeDescontosParaCalcular,List<Produto> listaEstoque){
-		
 		Produto produtoRetornado=new Produto();
 		int achouDesconto=-1;
 		
@@ -214,7 +209,7 @@ public class FuncionalidadesNovas {
 				Date dataFalsa=new Date(ano,mes,i);
 				diaSemana=dataFalsa.getDay();
 				String diaFuncionario=parts[k];
-				
+				System.out.println("falsa" + diaSemana + "DiaFunc "+ diaFuncionario);
 				if(diaSemana==0&&diaFuncionario.equalsIgnoreCase("DO")){
 					totalDias++;
 				}
@@ -294,6 +289,7 @@ public class FuncionalidadesNovas {
 				Date dataFalsa=new Date(ano,mes,i);
 				diaSemana=dataFalsa.getDay();
 				String diaFuncionario=parts[k];
+				System.out.println("falsa" + diaSemana + "DiaFunc "+ diaFuncionario);
 				if(diaSemana==0&&diaFuncionario.equalsIgnoreCase("DO")){
 					totalDias++;
 				}
@@ -323,69 +319,7 @@ public class FuncionalidadesNovas {
 		// TODO Auto-generated method stub
 	}
 	public void adicionarFalta(List<Faltas> listaDeFaltas, FuncionarioModificado Func,Date diaAtual){
-		String diaSemanda;
-		String dia="";
-		boolean achou=false;
-		
-		
-		 String input_date=diaAtual.getDate()+"/"+diaAtual.getMonth()+"/"+diaAtual.getYear();
-		 
-		  SimpleDateFormat format1=new SimpleDateFormat("dd/MM/yyyy");
-		  Date dt1 = null;
-		try {
-			dt1 = format1.parse(input_date);
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		  DateFormat format2=new SimpleDateFormat("EEEE"); 
-		  String finalDay=format2.format(dt1);
-		  diaSemanda=finalDay;
-		  
-		
-		String diasTrabalho=Func.getDiasTrabalho();
-		String[] parts = diasTrabalho.split("-");
-		
-		for(int i=0;i<parts.length;i++){
-			dia="";
-			
-			if(parts[i].equalsIgnoreCase("DO")){
-				dia="Domingo";
-			}
-			if(parts[i].equalsIgnoreCase("SG")){
-				dia="Segunda-Feira";
-			}
-			if(parts[i].equalsIgnoreCase("TE")){
-				dia="Terça-Feira";
-			}
-			if(parts[i].equalsIgnoreCase("QA")){
-				dia="Quarta-Feira";
-			}
-			if(parts[i].equalsIgnoreCase("QI")){
-				dia="Quinta-Feira";
-			}
-			if(parts[i].equalsIgnoreCase("SE")){
-				dia="Sexta-Feira";
-			}
-			if(parts[i].equalsIgnoreCase("SA")){
-				dia="Sábado";
-			}
-			
-			if(dia.equalsIgnoreCase(diaSemanda)){
-				achou=true;
-			}
-		}
-		
-		if(achou==true){
-
-			int idfalta=listaDeFaltas.size()+1;
-			Faltas novaFalta=new Faltas(idfalta, Func.getIdFunc(), diaAtual);
-			listaDeFaltas.add(novaFalta);
-			
-		}else{
-			throw new FuncionarioNaoTrabalhaDiaException();
-		}
-		
+		throw new UnsupportedOperationException();
 	}
 
 
