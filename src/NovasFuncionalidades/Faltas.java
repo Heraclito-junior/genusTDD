@@ -35,4 +35,12 @@ public class Faltas {
 		this.idFuncionario = idFuncionario;
 		this.dataFalta = dataFalta;
 	}
+	
+	public Faltas(Faltas falta) {
+		super();
+		this.idFalta = falta.getIdFalta();
+		this.idFuncionario = falta.getIdFuncionario();
+		this.dataFalta = falta.getDataFalta();
+	}
+	
 }

@@ -173,16 +173,153 @@ public class FuncionalidadesNovas {
 	}
 	
 	public int CalcularDiasTrabalhoNoMes(int ano, int mes, FuncionarioModificado func){
-		throw new UnsupportedOperationException();
+		
+		String diasTrabalho=func.getDiasTrabalho();
+		String[] parts = diasTrabalho.split("-");
+		
+		int totalDias=0;
+		
+		int quantosDiasTemOMes=0;
+		
+		int diaSemana;
+		
+		if(mes==1||mes==3||mes==5||mes==7||mes==8||mes==10||mes==12){
+			quantosDiasTemOMes=31;
+		}
+		
+		if(mes==4||mes==6||mes==9||mes==11){
+			quantosDiasTemOMes=31;
+		}
+		if(mes==2){
+			if(ano % 400 == 0){
+				quantosDiasTemOMes=29;
+
+	        } else if((ano % 4 == 0) && (ano % 100 != 0)){
+				quantosDiasTemOMes=29;
+
+	        } else{
+				quantosDiasTemOMes=28;
+	        }
+		}
+		
+		
+		for(int i=0;i<quantosDiasTemOMes;i++){
+			for(int k=0;k<parts.length;k++){
 				
+				Date dataFalsa=new Date(ano,mes,i);
+				diaSemana=dataFalsa.getDay();
+				String diaFuncionario=parts[k];
+				System.out.println("falsa" + diaSemana + "DiaFunc "+ diaFuncionario);
+				if(diaSemana==0&&diaFuncionario.equalsIgnoreCase("DO")){
+					totalDias++;
+				}
+				if(diaSemana==1 && diaFuncionario.equalsIgnoreCase("SG")){
+					totalDias++;
+				}
+				if(diaSemana==2 && diaFuncionario.equalsIgnoreCase("TE")){
+					totalDias++;
+				}
+				if(diaSemana==3 && diaFuncionario.equalsIgnoreCase("QA")){
+					totalDias++;
+				}
+				if(diaSemana==4 && diaFuncionario.equalsIgnoreCase("QI")){
+					totalDias++;
+				}
+				if(diaSemana==5 && diaFuncionario.equalsIgnoreCase("SE")){
+					totalDias++;
+				}
+				if(diaSemana==6 && diaFuncionario.equalsIgnoreCase("SA")){
+					totalDias++;
+				}
+				  
+			}
+		}
+		return totalDias;
 	}
 
 
-	public int CalcularDiasTrabalhoNoMesComFalta(int i, int j, FuncionarioModificado funcionarioParaTestar,
-			List<Faltas> listaFaltas) {
-		throw new UnsupportedOperationException();
+	public int CalcularDiasTrabalhoNoMesComFalta(int ano, int mes, FuncionarioModificado func,
+		List<Faltas> listaFaltas) {
+		int diasFaltados=0;
+		List<Faltas> listaFiltrada=new ArrayList<Faltas>();
+		for(int i=0;i<listaFaltas.size();i++){
+			if(listaFaltas.get(i).getDataFalta().getYear()==ano&& listaFaltas.get(i).getDataFalta().getMonth()==mes){
+				Faltas faltaParaFiltrar=listaFaltas.get(i);
+				listaFiltrada.add(new Faltas(faltaParaFiltrar));
+				diasFaltados++;
+			}
+		}
+		
+		for(int i=0;i<listaFiltrada.size();i++){
+			
+		}
+		
+		
+		String diasTrabalho=func.getDiasTrabalho();
+		String[] parts = diasTrabalho.split("-");
+		
+		int totalDias=0;
+		
+		int quantosDiasTemOMes=0;
+		
+		int diaSemana;
+		
+		if(mes==1||mes==3||mes==5||mes==7||mes==8||mes==10||mes==12){
+			quantosDiasTemOMes=31;
+		}
+		
+		if(mes==4||mes==6||mes==9||mes==11){
+			quantosDiasTemOMes=31;
+		}
+		if(mes==2){
+			if(ano % 400 == 0){
+				quantosDiasTemOMes=29;
 
+	        } else if((ano % 4 == 0) && (ano % 100 != 0)){
+				quantosDiasTemOMes=29;
+
+	        } else{
+				quantosDiasTemOMes=28;
+	        }
+		}
+		
+		for(int i=0;i<quantosDiasTemOMes;i++){
+			for(int k=0;k<parts.length;k++){
+				
+				Date dataFalsa=new Date(ano,mes,i);
+				diaSemana=dataFalsa.getDay();
+				String diaFuncionario=parts[k];
+				System.out.println("falsa" + diaSemana + "DiaFunc "+ diaFuncionario);
+				if(diaSemana==0&&diaFuncionario.equalsIgnoreCase("DO")){
+					totalDias++;
+				}
+				if(diaSemana==1 && diaFuncionario.equalsIgnoreCase("SG")){
+					totalDias++;
+				}
+				if(diaSemana==2 && diaFuncionario.equalsIgnoreCase("TE")){
+					totalDias++;
+				}
+				if(diaSemana==3 && diaFuncionario.equalsIgnoreCase("QA")){
+					totalDias++;
+				}
+				if(diaSemana==4 && diaFuncionario.equalsIgnoreCase("QI")){
+					totalDias++;
+				}
+				if(diaSemana==5 && diaFuncionario.equalsIgnoreCase("SE")){
+					totalDias++;
+				}
+				if(diaSemana==6 && diaFuncionario.equalsIgnoreCase("SA")){
+					totalDias++;
+				}
+				  
+			}
+		}
+		return totalDias-diasFaltados;
+		
 		// TODO Auto-generated method stub
+	}
+	public void adicionarFalta(List<Faltas> listaDeFaltas, FuncionarioModificado Func,Date diaAtual){
+		throw new UnsupportedOperationException();
 	}
 
 

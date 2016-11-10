@@ -21,6 +21,8 @@ import NovasFuncionalidades.FuncionalidadesNovas;
 import NovasFuncionalidades.FuncionarioModificado;
 import NovasFuncionalidades.Lotes;
 import NovasFuncionalidades.VendaModificada;
+import exception.CombProdutoLoteInvalidoException;
+import exception.FuncionarioNaoTrabalhaDiaException;
 import genus.Tipos.Produto;
 
 public class TesteFaltasFuncionario {
@@ -51,9 +53,9 @@ public class TesteFaltasFuncionario {
     	Faltas auxiliarParaAlocacaoFaltas;
 		
 
-		when(novasFuncionalidades.retornarFuncionarioPorID(1)).thenReturn(new FuncionarioModificado("Joao", "Neves",1, 35000, "99991-2345", "1996-01-30", "Natal","DO-SE-TE-QA-QI-SE-SA", true));
+		when(novasFuncionalidades.retornarFuncionarioPorID(1)).thenReturn(new FuncionarioModificado("Joao", "Neves",1, 35000, "99991-2345", "1996-01-30", "Natal","DO-SG-TE-QA-QI-SE-SA", true));
 		when(novasFuncionalidades.retornarFuncionarioPorID(2)).thenReturn(new  FuncionarioModificado("Tirio","Lanis",2, 35000, "97534-2456", "1990-02-28", "Natal","TE-QA-QI-SE", true));
-		when(novasFuncionalidades.retornarFuncionarioPorID(3)).thenReturn(new  FuncionarioModificado("Dane","Targa",3, 35000, "99503-8753", "1998-03-12", "Natal","SE-TE-QA", true));
+		when(novasFuncionalidades.retornarFuncionarioPorID(3)).thenReturn(new  FuncionarioModificado("Dane","Targa",3, 35000, "99503-8753", "1998-03-12", "Natal","SG-TE-QA", true));
 		
 		
 
@@ -85,6 +87,31 @@ public class TesteFaltasFuncionario {
     	
        
     }
+    
+    @Test    
+	public void adicionarFalta() {
+    	FuncionarioModificado funcionarioParaTestar=listaDeFuncionarios.get(1);
+		FuncionalidadesNovas funcionalidadesTest=new FuncionalidadesNovas();
+		List<Faltas> faltasInsercao=new ArrayList<Faltas>(listaFaltas);
+		Date dataTeste=new Date(2016,11,10);
+		funcionalidadesTest.adicionarFalta(faltasInsercao, funcionarioParaTestar, dataTeste);
+		
+		
+
+		assertEquals(faltasInsercao.get(3).getIdFalta(), 4);
+	}
+    
+    @Test(expected=FuncionarioNaoTrabalhaDiaException.class)     
+ 	public void adicionarFaltaDiaFuncionarioNaoTrabalha() {
+     	FuncionarioModificado funcionarioParaTestar=listaDeFuncionarios.get(1);
+ 		FuncionalidadesNovas funcionalidadesTest=new FuncionalidadesNovas();
+ 		List<Faltas> faltasInsercao=new ArrayList<Faltas>(listaFaltas);
+		Date dataTeste=new Date(2016,11,12);
+ 		funcionalidadesTest.adicionarFalta(faltasInsercao, funcionarioParaTestar, dataTeste);
+ 		
+
+ 	}
+    
 	
 
 	
@@ -121,7 +148,7 @@ public class TesteFaltasFuncionario {
 		
 		double salario =funcionarioParaTestar.getF_Salario();
 		
-		double porcentagemDias=diasFalta/diasTrabalho;
+		double porcentagemDias=((double)diasFalta)/((double)diasTrabalho);
 		
 		double Total=salario*porcentagemDias;
 		
