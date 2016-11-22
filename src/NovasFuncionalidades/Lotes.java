@@ -10,17 +10,25 @@ public class Lotes {
 	double quantidadeAtual;
 	double quantidadeVendida;
 	double quantidadeDesperdicada;
+	double precoNaHora;
+	
 	Date dataInicioLote;
 	Date dataFimLote;
 	
+	
+	
+	
+	
+	
 	public Lotes(int idLote, int idProduto, double quantidadeAtual, double quantidadeVendida,
-			double quantidadeDesperdicada, Date dataInicioLote, Date dataFimLote) {
+			double quantidadeDesperdicada,double preco, Date dataInicioLote, Date dataFimLote) {
 		super();
 		this.idLote = idLote;
 		this.idProduto = idProduto;
 		this.quantidadeAtual = quantidadeAtual;
 		this.quantidadeVendida = quantidadeVendida;
 		this.quantidadeDesperdicada = quantidadeDesperdicada;
+		this.precoNaHora=preco;
 		this.dataInicioLote = dataInicioLote;
 		this.dataFimLote = dataFimLote;
 	}
@@ -32,6 +40,7 @@ public class Lotes {
 		this.quantidadeAtual = novoLote.getQuantidadeAtual();
 		this.quantidadeVendida = novoLote.getQuantidadeVendida();
 		this.quantidadeDesperdicada = novoLote.getQuantidadeDesperdicada();
+		this.precoNaHora = novoLote.getPrecoNaHora();
 		this.dataInicioLote = novoLote.getDataInicioLote();
 		this.dataFimLote = novoLote.getDataFimLote();
 	}
@@ -44,7 +53,7 @@ public class Lotes {
 
 	public int getIdLote() {
 		return idLote;
-	}
+	} 
 	public void setIdLote(int idLote) {
 		this.idLote = idLote;
 	}
@@ -88,6 +97,14 @@ public class Lotes {
 
 	public void setQuantidadeAtual(double quantidadeAtual) {
 		this.quantidadeAtual = quantidadeAtual;
+	}
+
+	public double getPrecoNaHora() {
+		return precoNaHora;
+	}
+
+	public void setPrecoNaHora(double precoNaHora) {
+		this.precoNaHora = precoNaHora;
 	}
 	
 }

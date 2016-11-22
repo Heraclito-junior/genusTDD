@@ -14,6 +14,7 @@ import java.util.List;
 
 import exception.FuncionarioNaoTrabalhaDiaException;
 import exception.ProdutoInexistenteException;
+import genus.Tipos.Fatura;
 import genus.Tipos.Produto;
 import genus.Tipos.Venda;
 
@@ -58,6 +59,20 @@ public class FuncionalidadesNovas {
 	}
 	
 	public Lotes retornarLotesPorID(int idLote){
+		
+		throw new UnsupportedOperationException();
+		
+		
+	}
+	
+	public VendaModificada retornarVendaPorID(int idDesconto){
+		
+		throw new UnsupportedOperationException();
+		
+		
+	}
+	
+	public FaturaModificada retornarFaturaPorID(int idDesconto){
 		
 		throw new UnsupportedOperationException();
 		
@@ -177,6 +192,7 @@ public class FuncionalidadesNovas {
 				
 	}
 	
+	@SuppressWarnings("deprecation")
 	public int CalcularDiasTrabalhoNoMes(int ano, int mes, FuncionarioModificado func){
 		
 		String diasTrabalho=func.getDiasTrabalho();
@@ -211,6 +227,7 @@ public class FuncionalidadesNovas {
 		for(int i=0;i<quantosDiasTemOMes;i++){
 			for(int k=0;k<parts.length;k++){
 				
+				
 				Date dataFalsa=new Date(ano,mes,i);
 				diaSemana=dataFalsa.getDay();
 				String diaFuncionario=parts[k];
@@ -243,6 +260,7 @@ public class FuncionalidadesNovas {
 	}
 
 
+	@SuppressWarnings("deprecation")
 	public int CalcularDiasTrabalhoNoMesComFalta(int ano, int mes, FuncionarioModificado func,
 		List<Faltas> listaFaltas) {
 		int diasFaltados=0;
@@ -274,7 +292,7 @@ public class FuncionalidadesNovas {
 		}
 		
 		if(mes==4||mes==6||mes==9||mes==11){
-			quantosDiasTemOMes=31;
+			quantosDiasTemOMes=30;
 		}
 		if(mes==2){
 			if(ano % 400 == 0){
@@ -322,6 +340,7 @@ public class FuncionalidadesNovas {
 		
 		// TODO Auto-generated method stub
 	}
+	@SuppressWarnings("deprecation")
 	public void adicionarFalta(List<Faltas> listaDeFaltas, FuncionarioModificado Func,Date diaAtual){
 		String diaSemanda;
 		String dia="";
@@ -385,6 +404,36 @@ public class FuncionalidadesNovas {
 		}else{
 			throw new FuncionarioNaoTrabalhaDiaException();
 		}
+		
+	}
+	
+	public Double calcularVendasMes(int ano, int mes, List<VendaModificada> listaVendas){
+		
+		throw new UnsupportedOperationException();
+		
+		
+		
+	}
+	
+	public Double calcularFaturaMes(int ano, int mes, List<FaturaModificada> listaFatura){
+		
+		throw new UnsupportedOperationException();
+		
+		
+		
+	}
+	
+	public Double calcularSalarios(int ano, int mes, List<Faltas> listaDeFaltas,List<FuncionarioModificado>listaFuncionarios){
+		
+		
+		
+		
+		
+		
+		
+		throw new UnsupportedOperationException();
+		
+		
 		
 	}
 

@@ -16,25 +16,21 @@ import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 
 
-import NovasFuncionalidades.Desconto;
+
 import NovasFuncionalidades.FuncionalidadesNovas;
 import NovasFuncionalidades.Lotes;
-import NovasFuncionalidades.VendaContemPromocao;
 import NovasFuncionalidades.VendaModificada;
 import NovasFuncionalidades.VendaModificadaLotes;
 import exception.CombProdutoLoteInvalidoException;
 import exception.LoteExpiradoException;
-import exception.ProdutoInexistenteException;
-import exception.ProdutoNaoEstaNoCarrinhoException;
-import exception.QuantidadeInsuficienteException;
 
-import genus.Tipos.Funcionario;
+
 import genus.Tipos.Produto;
-import genus.Tipos.Venda;
+
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 public class TesteLotes {
 	
@@ -46,7 +42,6 @@ public class TesteLotes {
 	
 	List<Produto> listaDeProdutos;
 	List<Lotes> listaDeLotes;
-	//List<VendaContemPromocao>listaDeVendaContem;
 	List<String>lista;
 	Date dataAtual;
 	
@@ -55,7 +50,6 @@ public class TesteLotes {
     	MockitoAnnotations.initMocks(this);
     	listaDeProdutos=new ArrayList<Produto>();
     	listaDeLotes=new ArrayList<Lotes>();
-		//listaDeVendaContem=new ArrayList<VendaContemPromocao>();
 		
 		Produto auxiliarParaAlocacaoProdutos;
 		Lotes auxiliarParaAlocacaoDesconto;
@@ -80,13 +74,13 @@ public class TesteLotes {
 		}
 		
 		//Nenhum lote
-		when(novasFuncionalidades.retornarLotesPorID(0)).thenReturn(new Lotes(1,0,0,0,0,new Date(1900,01,01),new Date(4000, 01,01) ));
+		when(novasFuncionalidades.retornarLotesPorID(0)).thenReturn(new Lotes(1,0,0,0,0,0.0,new Date(1900,01,01),new Date(4000, 01,01) ));
 		//tomate
-		when(novasFuncionalidades.retornarLotesPorID(1)).thenReturn(new Lotes(2,1,91,0,0,new Date(2016,02,05),new Date(2016, 11,9) ));
+		when(novasFuncionalidades.retornarLotesPorID(1)).thenReturn(new Lotes(2,1,91,0,0,0.5,new Date(2016,02,05),new Date(2016, 11,9) ));
 		//absorvente
-		when(novasFuncionalidades.retornarLotesPorID(2)).thenReturn(new Lotes(3,7,60,10,0,new Date(2016,05,05),new Date(2017, 12,23)));
+		when(novasFuncionalidades.retornarLotesPorID(2)).thenReturn(new Lotes(3,7,60,10,0,19.5,new Date(2016,05,05),new Date(2017, 12,23)));
 		//analgesico
-		when(novasFuncionalidades.retornarLotesPorID(3)).thenReturn(new Lotes(4,8,40,10,0,new Date(2016,05,05),new Date(2016, 07,05)));
+		when(novasFuncionalidades.retornarLotesPorID(3)).thenReturn(new Lotes(4,8,40,10,0,15.5,new Date(2016,05,05),new Date(2016, 07,05)));
 		
 		
 		
@@ -322,7 +316,6 @@ public class TesteLotes {
 		
 		funionalidadesParaTeste.setarLotes(lotesParaEssaInteracao,dataAtual);
 		
-
 		
 		
 		VendaModificadaLotes vendaTestaFinal=new VendaModificadaLotes();
