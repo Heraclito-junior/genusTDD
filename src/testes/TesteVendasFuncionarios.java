@@ -19,6 +19,7 @@ import NovasFuncionalidades.FuncionarioModificado;
 import NovasFuncionalidades.VendaModificada;
 import exception.NenhumaVendaAnoException;
 import exception.NenhumaVendaDiaException;
+import exception.NenhumaVendaMesException;
 import exception.ProdutoInexistenteException;
 
 public class TesteVendasFuncionarios {
@@ -119,7 +120,7 @@ public class TesteVendasFuncionarios {
 	}
     
     
-    @Test    
+    @Test(expected=NenhumaVendaMesException.class)
 	public void calcularValorVendasMesSemVenda() {
     	
     	
