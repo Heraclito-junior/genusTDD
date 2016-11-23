@@ -5,7 +5,10 @@
  */
 package NovasFuncionalidades;
 
+import static org.junit.Assert.assertEquals;
+
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -195,6 +198,7 @@ public class FuncionalidadesNovas {
 	@SuppressWarnings("deprecation")
 	public int CalcularDiasTrabalhoNoMes(int ano, int mes, FuncionarioModificado func){
 		
+		
 		String diasTrabalho=func.getDiasTrabalho();
 		String[] parts = diasTrabalho.split("-");
 		
@@ -258,6 +262,8 @@ public class FuncionalidadesNovas {
 		}
 		return totalDias;
 	}
+	
+	
 
 
 	@SuppressWarnings("deprecation")
@@ -266,12 +272,20 @@ public class FuncionalidadesNovas {
 		int diasFaltados=0;
 		List<Faltas> listaFiltrada=new ArrayList<Faltas>();
 		for(int i=0;i<listaFaltas.size();i++){
-			if(listaFaltas.get(i).getDataFalta().getYear()==ano&& listaFaltas.get(i).getDataFalta().getMonth()==mes){
+			
+
+			if(listaFaltas.get(i).getDataFalta().getYear()==ano&& listaFaltas.get(i).getDataFalta().getMonth()==mes && listaFaltas.get(i).getIdFuncionario()==func.getIdFunc()){
+				
+				
 				Faltas faltaParaFiltrar=listaFaltas.get(i);
 				listaFiltrada.add(new Faltas(faltaParaFiltrar));
 				diasFaltados++;
 			}
 		}
+		
+		
+		
+		
 		
 		for(int i=0;i<listaFiltrada.size();i++){
 			
@@ -283,8 +297,9 @@ public class FuncionalidadesNovas {
 		
 		int totalDias=0;
 		
-		int quantosDiasTemOMes=0;
+		int quantosDiasTemOMes=CalcularDiasTrabalhoNoMes(ano,mes,func);
 		
+		/**
 		int diaSemana;
 		
 		if(mes==1||mes==3||mes==5||mes==7||mes==8||mes==10||mes==12){
@@ -335,8 +350,13 @@ public class FuncionalidadesNovas {
 				}
 				  
 			}
+			
 		}
-		return totalDias-diasFaltados;
+		System.out.println(",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,");
+		System.out.println(totalDias);
+		System.out.println(",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,");
+		*/
+		return quantosDiasTemOMes-diasFaltados;
 		
 		// TODO Auto-generated method stub
 	}
@@ -407,9 +427,26 @@ public class FuncionalidadesNovas {
 		
 	}
 	
-	public Double calcularVendasMes(int ano, int mes, List<VendaModificada> listaVendas){
+	public Double calcularVendasMes(int ano, int mes, List<VendaModificada> listaVendas2){
 		
-		throw new UnsupportedOperationException();
+		double valorTotal=0;
+		
+		int anoVenda;
+		int anoMes;
+		
+
+		for(int i=0;i<listaVendas2.size();i++){
+			anoVenda=listaVendas2.get(i).getDataVenda().getYear();
+			anoMes=listaVendas2.get(i).getDataVenda().getMonth();
+			
+			if(anoVenda==ano && anoMes==mes){
+				valorTotal+=listaVendas2.get(i).getValorTotal();
+			}
+			
+			
+		}
+		
+		return valorTotal;
 		
 		
 		
@@ -417,7 +454,26 @@ public class FuncionalidadesNovas {
 	
 	public Double calcularFaturaMes(int ano, int mes, List<FaturaModificada> listaFatura){
 		
-		throw new UnsupportedOperationException();
+
+		double valorTotal=0;
+		
+		int anoVenda;
+		int anoMes;
+		
+
+		for(int i=0;i<listaFatura.size();i++){
+			anoVenda=listaFatura.get(i).getDataFatura().getYear();
+			anoMes=listaFatura.get(i).getDataFatura().getMonth();
+			
+			if(anoVenda==ano && anoMes==mes){
+				valorTotal+=listaFatura.get(i).getValorFatura();
+			}
+			
+			
+		}
+		
+		return valorTotal;
+		
 		
 		
 		
@@ -426,16 +482,61 @@ public class FuncionalidadesNovas {
 	public Double calcularSalarios(int ano, int mes, List<Faltas> listaDeFaltas,List<FuncionarioModificado>listaFuncionarios){
 		
 		
+		Double ValorTotal=0.0;
+
+		
+		for(int i=0;i<listaFuncionarios.size();i++){
+			
+			FuncionarioModificado funcionarioParaTestar=listaFuncionarios.get(i);
+			int diasTrabalho=0;
+			diasTrabalho=CalcularDiasTrabalhoNoMes(ano,mes,funcionarioParaTestar);
+			int diasFalta=0;
+			diasFalta=CalcularDiasTrabalhoNoMesComFalta(ano, mes, funcionarioParaTestar,listaDeFaltas);
+			
+			double salario =funcionarioParaTestar.getF_Salario();
+			
+
+			double porcentagemDias=((double)diasFalta)/((double)diasTrabalho);
+			
+			
+			
+			
+			double Total=truncarValor(salario*porcentagemDias);
+			
+
+			
+			
+			ValorTotal+=Total;
+			
+			
+		}
 		
 		
 		
-		
-		
-		throw new UnsupportedOperationException();
-		
+		return ValorTotal;
 		
 		
 	}
+	
+	
+	public double truncarValor(double valorParaTruncar){
+		double valorTruncado=0;
+		
+		DecimalFormat df = new DecimalFormat("#.##");
+		String ajudaParse=df.format(valorParaTruncar);
+		ajudaParse=ajudaParse.replace(",", ".");
+		valorTruncado=Double.parseDouble(ajudaParse);
+		return valorTruncado;
+		
+	}
+
+
+	public double calcularVendasFuncionarioMes(int i, int j, List<VendaModificada> listaVendas,
+			FuncionarioModificado funcTeste) {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException();
+		//return 0;
+	} 
 
 
 	

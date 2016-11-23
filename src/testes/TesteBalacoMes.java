@@ -24,7 +24,6 @@ public class TesteBalacoMes {
 	List<FuncionarioModificado> listaDeFuncionarios;
 	List<Faltas>listaFaltas;
 	List<VendaModificada> listaVendas;
-	//List<VendaContemPromocao>listaDeVendaContem;
 	List<String>lista;
 	List<FaturaModificada> listaFatura;
 	Date dataAtual;
@@ -42,7 +41,8 @@ public class TesteBalacoMes {
     	MockitoAnnotations.initMocks(this);
     	listaDeFuncionarios=new ArrayList<FuncionarioModificado>();
     	listaFaltas=new ArrayList<Faltas>();
-		
+    	listaVendas=new ArrayList<VendaModificada>();
+    	listaFatura=new ArrayList<FaturaModificada>();
 
     	FuncionarioModificado auxiliarParaAlocacaoFuncionario;
     	Faltas auxiliarParaAlocacaoFaltas;
@@ -57,7 +57,7 @@ public class TesteBalacoMes {
 		
 
 		
-		for(int j=1;j<=10;j++){
+		for(int j=1;j<=3;j++){
 			auxiliarParaAlocacaoFuncionario=novasFuncionalidades.retornarFuncionarioPorID(j);
 			listaDeFuncionarios.add(auxiliarParaAlocacaoFuncionario);
 			
@@ -82,7 +82,7 @@ public class TesteBalacoMes {
 		when(novasFuncionalidades.retornarVendaPorID(1)).thenReturn( new VendaModificada(1, 1, 0, 1000, new Date(2016,11,10)) );
 		when(novasFuncionalidades.retornarVendaPorID(2)).thenReturn( new VendaModificada(2, 1, 0, 2000, new Date(2016,11,12)) );
 		when(novasFuncionalidades.retornarVendaPorID(3)).thenReturn( new VendaModificada(3, 1, 0, 4000, new Date(2016,10,10)) );
-		when(novasFuncionalidades.retornarVendaPorID(3)).thenReturn( new VendaModificada(4, 1, 0, 8000, new Date(2016,11,16)) );
+		when(novasFuncionalidades.retornarVendaPorID(4)).thenReturn( new VendaModificada(4, 1, 0, 8000, new Date(2016,11,16)) );
 		
 		
 		
@@ -90,7 +90,9 @@ public class TesteBalacoMes {
 			auxiliarParaAlocacaoVendas=novasFuncionalidades.retornarVendaPorID(j);
 			listaVendas.add(auxiliarParaAlocacaoVendas);
 			
+			
 		}
+		
 		
 		
 		when(novasFuncionalidades.retornarFaturaPorID(1)).thenReturn( new FaturaModificada(1, 2000, new Date(2016,11,01), true, 1));
@@ -140,7 +142,7 @@ public class TesteBalacoMes {
 		
 		
 
-		assertEquals(4200, valorFatura,0.001);
+		assertEquals(3200, valorFatura,0.001);
 	}
     
     
@@ -156,16 +158,24 @@ public class TesteBalacoMes {
     	
     	valorVenda=novasFuncionalidades.calcularVendasMes(2016, 11, listaVendas);
     	
+    	valorVenda=novasFuncionalidades.truncarValor(valorVenda);
+
     	
     	double valorFatura=0;
     	
     	valorFatura=novasFuncionalidades.calcularFaturaMes(2016, 11, listaFatura);
     	
+    	valorFatura=novasFuncionalidades.truncarValor(valorFatura);
     	double valorSalarios=0;
+    	
+    	
+ 
     	
     	valorSalarios=novasFuncionalidades.calcularSalarios(2016, 11, listaFaltas, listaDeFuncionarios);
     	
     	
+    	valorSalarios=novasFuncionalidades.truncarValor(valorSalarios);
+
     
     	
 		double valorTotal=valorVenda-valorFatura-valorSalarios;
@@ -173,8 +183,47 @@ public class TesteBalacoMes {
 		
 		
 
-		assertEquals(633.3334, valorTotal,0.001);
+		assertEquals(1466.67, valorTotal,0.001);
 	}
+    
+    @Test    
+ 	public void calcularBalancoMesZerado() {
+     	
+     	
+     	
+
+     	FuncionalidadesNovas novasFuncionalidades=new FuncionalidadesNovas();
+     	double valorVenda=0;
+     	
+     	valorVenda=novasFuncionalidades.calcularVendasMes(2016, 12, listaVendas);
+     	
+     	valorVenda=novasFuncionalidades.truncarValor(valorVenda);
+
+     	
+     	double valorFatura=0;
+     	
+     	valorFatura=novasFuncionalidades.calcularFaturaMes(2016, 12, listaFatura);
+     	
+     	
+     	valorFatura=novasFuncionalidades.truncarValor(valorFatura);
+     	double valorSalarios=0;
+     	
+     	
+  
+     	
+     	valorSalarios=novasFuncionalidades.calcularSalarios(2016, 12, listaFaltas, listaDeFuncionarios);
+     	
+     	
+     	valorSalarios=novasFuncionalidades.truncarValor(valorSalarios);
+
+     	
+     	
+ 		double valorTotal=valorVenda-valorFatura-valorSalarios;
+
+ 		
+ 		//o valor do salario dos funcionarios
+ 		assertEquals(-6500, valorTotal,0.001);
+ 	}
     
     
 
