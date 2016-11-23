@@ -17,6 +17,9 @@ import NovasFuncionalidades.FaturaModificada;
 import NovasFuncionalidades.FuncionalidadesNovas;
 import NovasFuncionalidades.FuncionarioModificado;
 import NovasFuncionalidades.VendaModificada;
+import exception.NenhumaVendaAnoException;
+import exception.NenhumaVendaDiaException;
+import exception.ProdutoInexistenteException;
 
 public class TesteVendasFuncionarios {
 	
@@ -52,11 +55,11 @@ public class TesteVendasFuncionarios {
     	when(novasFuncionalidades.retornarFuncionarioPorID(1)).thenReturn(new FuncionarioModificado("Joao", "Neves",1, 3000, "99991-2345", "1996-01-30", "Natal","DO-SG-TE-QA-QI-SE-SA", true));
 		when(novasFuncionalidades.retornarFuncionarioPorID(2)).thenReturn(new  FuncionarioModificado("Tirio","Lanis",2, 1500, "97534-2456", "1990-02-28", "Natal","TE-QA-QI-SE", true));
 		when(novasFuncionalidades.retornarFuncionarioPorID(3)).thenReturn(new  FuncionarioModificado("Dane","Targa",3, 2000, "99503-8753", "1998-03-12", "Natal","SG-TE-QA", true));
-		
+		when(novasFuncionalidades.retornarFuncionarioPorID(4)).thenReturn(new  FuncionarioModificado("Elizabeth","Targa",4, 2000, "99503-8753", "1998-03-12", "Natal","SG-TE-QA", true));
 		
 
 		
-		for(int j=1;j<=3;j++){
+		for(int j=1;j<=4;j++){
 			auxiliarParaAlocacaoFuncionario=novasFuncionalidades.retornarFuncionarioPorID(j);
 			listaDeFuncionarios.add(auxiliarParaAlocacaoFuncionario);
 			
@@ -98,8 +101,9 @@ public class TesteVendasFuncionarios {
        
     }
     
+    
     @Test    
-	public void calcularValorVendasMes() {
+	public void calcularValorVendasMesFuncionario() {
     	
     	
     	FuncionalidadesNovas novasFuncionalidades=new FuncionalidadesNovas();
@@ -130,6 +134,73 @@ public class TesteVendasFuncionarios {
 
 		assertEquals(0, valorVenda,0.001);
 	}
+    
+    
+    @Test  
+	public void calcularValorVendasFuncionarioDiaEspecifico() {
+    	
+    	
+    	FuncionalidadesNovas novasFuncionalidades=new FuncionalidadesNovas();
+    	double valorVenda=0;
+    	
+    	FuncionarioModificado funcTeste=listaDeFuncionarios.get(2);
+    	
+    	valorVenda=novasFuncionalidades.calcularVendasFuncionarioDia(2016, 12,16, listaVendas,funcTeste);
+		
+		
+
+		assertEquals(0, valorVenda,0.001);
+	}
+    
+	
+    @Test(expected=NenhumaVendaDiaException.class)
+	public void calcularValorVendasFuncionarioDiaEspecificoSemVenda() {
+    	
+    	
+    	FuncionalidadesNovas novasFuncionalidades=new FuncionalidadesNovas();
+    	double valorVenda=0;
+    	
+    	FuncionarioModificado funcTeste=listaDeFuncionarios.get(2);
+    	
+    	valorVenda=novasFuncionalidades.calcularVendasFuncionarioDia(2016, 12,17, listaVendas,funcTeste);
+		
+		
+
+		assertEquals(0, valorVenda,0.001);
+	}
+    
+    @Test  
+   	public void calcularValorVendasFuncionarioAno() {
+       	
+       	
+       	FuncionalidadesNovas novasFuncionalidades=new FuncionalidadesNovas();
+       	double valorVenda=0;
+       	
+       	FuncionarioModificado funcTeste=listaDeFuncionarios.get(2);
+       	
+       	valorVenda=novasFuncionalidades.calcularVendasFuncionarioAno(2016, listaVendas,funcTeste);
+   		
+   		
+
+   		assertEquals(0, valorVenda,0.001);
+   	}
+       
+   	
+    @Test(expected=NenhumaVendaAnoException.class)
+   	public void calcularValorVendasFuncionarioAnoEspecificoSemVenda() {
+       	
+       	
+       	FuncionalidadesNovas novasFuncionalidades=new FuncionalidadesNovas();
+       	double valorVenda=0;
+       	
+       	FuncionarioModificado funcTeste=listaDeFuncionarios.get(3);
+       	
+       	valorVenda=novasFuncionalidades.calcularVendasFuncionarioAno(2016, listaVendas,funcTeste);
+   		
+   		
+
+   		assertEquals(0, valorVenda,0.001);
+   	}
      
 
     

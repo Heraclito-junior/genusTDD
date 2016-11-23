@@ -17,6 +17,9 @@ import NovasFuncionalidades.FaturaModificada;
 import NovasFuncionalidades.FuncionalidadesNovas;
 import NovasFuncionalidades.FuncionarioModificado;
 import NovasFuncionalidades.VendaModificada;
+import exception.NenhumaVendaAnoException;
+import exception.NenhumaVendaDiaException;
+import exception.NenhumaVendaMesException;
 
 public class TesteBalacoMes {
 	
@@ -129,6 +132,76 @@ public class TesteBalacoMes {
 
 		assertEquals(11000, valorVenda,0.001);
 	}
+
+    
+    @Test(expected=NenhumaVendaMesException.class)   
+	public void calcularValorVendasMesSemVenda() {
+    	
+    	
+    	FuncionalidadesNovas novasFuncionalidades=new FuncionalidadesNovas();
+    	double valorVenda=0;
+    	
+    	valorVenda=novasFuncionalidades.calcularVendasMes(2016, 11, listaVendas);
+		
+		
+
+	}
+    
+    @Test(expected=NenhumaVendaAnoException.class)   
+	public void calcularValorVendasAnoSemVenda() {
+    	
+    	
+    	FuncionalidadesNovas novasFuncionalidades=new FuncionalidadesNovas();
+    	double valorVenda=0;
+    	
+    	valorVenda=novasFuncionalidades.calcularVendasAno(2017, listaVendas);
+		
+		
+
+	}
+    
+    @Test 
+	public void calcularValorVendasDia() {
+    	
+    	
+    	FuncionalidadesNovas novasFuncionalidades=new FuncionalidadesNovas();
+    	double valorVenda=0;
+    	
+    	valorVenda=novasFuncionalidades.calcularVendasDia(2016,11,12, listaVendas);
+    	
+    	assertEquals(2000, valorVenda,0.001);
+		
+
+	}
+    
+    @Test(expected=NenhumaVendaDiaException.class)   
+	public void calcularValorVendasDiaSemVenda() {
+    	
+    	
+    	FuncionalidadesNovas novasFuncionalidades=new FuncionalidadesNovas();
+    	double valorVenda=0;
+    	
+    	valorVenda=novasFuncionalidades.calcularVendasDia(2016,11,13, listaVendas);
+    	
+		
+
+	}
+    
+    @Test 
+	public void calcularValorVendasAno() {
+    	
+    	
+    	FuncionalidadesNovas novasFuncionalidades=new FuncionalidadesNovas();
+    	double valorVenda=0;
+    	
+    	valorVenda=novasFuncionalidades.calcularVendasAno(2016, listaVendas);
+    	
+    	assertEquals(15000, valorVenda,0.001);
+		
+
+	}
+    
+    
     
     
     @Test    
@@ -186,45 +259,7 @@ public class TesteBalacoMes {
 		assertEquals(1466.67, valorTotal,0.001);
 	}
     
-    @Test    
- 	public void calcularBalancoMesZerado() {
-     	
-     	
-     	
-
-     	FuncionalidadesNovas novasFuncionalidades=new FuncionalidadesNovas();
-     	double valorVenda=0;
-     	
-     	valorVenda=novasFuncionalidades.calcularVendasMes(2016, 12, listaVendas);
-     	
-     	valorVenda=novasFuncionalidades.truncarValor(valorVenda);
-
-     	
-     	double valorFatura=0;
-     	
-     	valorFatura=novasFuncionalidades.calcularFaturaMes(2016, 12, listaFatura);
-     	
-     	
-     	valorFatura=novasFuncionalidades.truncarValor(valorFatura);
-     	double valorSalarios=0;
-     	
-     	
-  
-     	
-     	valorSalarios=novasFuncionalidades.calcularSalarios(2016, 12, listaFaltas, listaDeFuncionarios);
-     	
-     	
-     	valorSalarios=novasFuncionalidades.truncarValor(valorSalarios);
-
-     	
-     	
- 		double valorTotal=valorVenda-valorFatura-valorSalarios;
-
- 		
- 		//o valor do salario dos funcionarios
- 		assertEquals(-6500, valorTotal,0.001);
- 	}
-    
+   
     
 
     

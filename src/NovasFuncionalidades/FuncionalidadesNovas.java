@@ -531,10 +531,49 @@ public class FuncionalidadesNovas {
 	}
 
 
-	public double calcularVendasFuncionarioMes(int i, int j, List<VendaModificada> listaVendas,
+	public double calcularVendasFuncionarioMes(int ano, int mes, List<VendaModificada> listaVendas,
+			FuncionarioModificado funcTeste) {
+		// TODO Auto-generated method stub
+		
+
+		
+		
+		
+		throw new UnsupportedOperationException();
+		//return 0;
+	}
+
+
+	public double calcularVendasFuncionarioDia(int ano, int mes, int dia, List<VendaModificada> listaVendas,
 			FuncionarioModificado funcTeste) {
 		// TODO Auto-generated method stub
 		throw new UnsupportedOperationException();
+
+		//return 0;
+	}
+
+
+	public double calcularVendasFuncionarioAno(int ano, List<VendaModificada> listaVendas,
+			FuncionarioModificado funcTeste) {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException();
+
+		//return 0;
+	}
+
+
+	public double calcularVendasAno(int ano, List<VendaModificada> listaVendas) {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException();
+
+		//return 0;
+	}
+
+
+	public double calcularVendasDia(int ano, int mes, int dia, List<VendaModificada> listaVendas) {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException();
+
 		//return 0;
 	} 
 
