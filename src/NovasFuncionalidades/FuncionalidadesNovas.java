@@ -7,6 +7,7 @@ package NovasFuncionalidades;
 
 import static org.junit.Assert.assertEquals;
 
+
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.ParseException;
@@ -20,6 +21,8 @@ import exception.NenhumaVendaAnoException;
 import exception.NenhumaVendaDiaException;
 import exception.NenhumaVendaMesException;
 import exception.ProdutoInexistenteException;
+import exception.PromocaoNaoExisteException;
+import exception.VendaNaoExisteException;
 import genus.Tipos.Fatura;
 import genus.Tipos.Produto;
 import genus.Tipos.Venda;
@@ -700,19 +703,65 @@ public class FuncionalidadesNovas {
 	}
 
 
-	public double calcularTotalDesconto(int i, List<VendaContemPromocao> listaVendaContem) {
+	public double calcularTotalDesconto(int id, List<VendaContemPromocao> listaVendaContem) {
 		// TODO Auto-generated method stub
+		int achou=-1;
+		double total=0.0;
+		double precoNormal=0.0;
+		double precodesconto=0.0;
+		double diferenca=0.0;
+		for(int i=0;i<listaVendaContem.size();i++){
+			if(id==listaVendaContem.get(i).getIDproduto()){
+				precoNormal=listaVendaContem.get(i).getPrecoNormal();
+				precodesconto=listaVendaContem.get(i).getPrecoDesconto();
+				diferenca=(precoNormal-precodesconto)*listaVendaContem.get(i).getQuantidade();
+				diferenca=truncarValor(diferenca);
+				total+=diferenca;
+				achou=1;
+			}
+		}
+		if(achou==-1){
+			throw new PromocaoNaoExisteException();
+		}
+		else{
+			return total;
+		}
 		
-		
-		
-		throw new UnsupportedOperationException();
-		//return 0;
 	}
 
 
-	public double calcularTotalDescontoVenda(int i, List<VendaContemPromocao> listaVendaContem) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException();
-		//return 0;
+	public double calcularTotalDescontoVenda(int idVenda, List<VendaContemPromocao> listaVendaContem) {
+		
+		int achou=-1;
+		double total=0.0;
+		double precoNormal=0.0;
+		double precodesconto=0.0;
+		double diferenca=0.0;
+		
+		for(int i=0;i<listaVendaContem.size();i++){
+			if(listaVendaContem.get(i).getIDvenda()==idVenda){
+				achou=1;
+			}
+		}
+		if(achou==-1){
+			throw new VendaNaoExisteException();
+		}
+		
+		
+		for(int i=0;i<listaVendaContem.size();i++){
+			if(idVenda==listaVendaContem.get(i).getIDvenda()){
+				precoNormal=listaVendaContem.get(i).getPrecoNormal();
+				precodesconto=listaVendaContem.get(i).getPrecoDesconto();
+				diferenca=(precoNormal-precodesconto)*listaVendaContem.get(i).getQuantidade();
+				diferenca=truncarValor(diferenca);
+				total+=diferenca;
+				achou=1;
+			}
+		}
+		
+		
+			return total;
+		
+		
 	}
 }

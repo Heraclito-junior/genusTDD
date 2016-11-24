@@ -24,7 +24,8 @@ import exception.NenhumaVendaAnoException;
 import exception.NenhumaVendaDiaException;
 import exception.NenhumaVendaMesException;
 import exception.ProdutoInexistenteException;
-import exception.PromocaoNaoExiste;
+import exception.PromocaoNaoExisteException;
+import exception.VendaNaoExisteException;
 import genus.Tipos.Produto;
 
 public class TesteTotalPromocao {
@@ -162,7 +163,7 @@ public class TesteTotalPromocao {
 		assertEquals(0.6, valorVenda,0.01);
 	}
     
-    @Test(expected=PromocaoNaoExiste.class)
+    @Test(expected=PromocaoNaoExisteException.class)
 	public void calcularCustoPromocaoInvalida() {
     	
     	
@@ -193,6 +194,24 @@ public class TesteTotalPromocao {
 		assertEquals(2.1, valorVenda,0.01);
 	}
     
+    
+    @Test(expected=VendaNaoExisteException.class)
+	public void calcularCustoVendaInexistente() {
+    	
+    	
+    	
+    	
+    	FuncionalidadesNovas novasFuncionalidades=new FuncionalidadesNovas();
+    	
+    	
+    	novasFuncionalidades.calcularTotalDescontoVenda(10,listaVendaContem);
+		
+		
+
+	}
+    
+    
+    
     @Test    
 	public void calcularValorPromocaoVendaSemDesconto() {
     	
@@ -202,7 +221,7 @@ public class TesteTotalPromocao {
     	FuncionalidadesNovas novasFuncionalidades=new FuncionalidadesNovas();
     	double valorVenda=0;
     	
-    	valorVenda=novasFuncionalidades.calcularTotalDesconto(3,listaVendaContem);
+    	valorVenda=novasFuncionalidades.calcularTotalDescontoVenda(3,listaVendaContem);
 		
 		
 
