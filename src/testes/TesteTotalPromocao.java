@@ -85,7 +85,7 @@ public class TesteTotalPromocao {
 		
 		when(novasFuncionalidades.retornarVendaPorID(1)).thenReturn(new VendaModificada( 1,1,1,5.1,new Date(2016,11,22)));
 		when(novasFuncionalidades.retornarVendaPorID(2)).thenReturn(new VendaModificada( 2,1,1,59.7,new Date(2016,11,22)));
-		when(novasFuncionalidades.retornarVendaPorID(2)).thenReturn(new VendaModificada( 3,1,1,19.5,new Date(2016,11,22)));
+		when(novasFuncionalidades.retornarVendaPorID(3)).thenReturn(new VendaModificada( 3,1,1,19.5,new Date(2016,11,22)));
 		
 
 		
@@ -97,11 +97,11 @@ public class TesteTotalPromocao {
 
 		
 		when(novasFuncionalidades.retornarVendaContemPromocaoPorID(1)).thenReturn(new VendaContemPromocao(1,1, 1, 3, 0.5, 0.4, 1));
-		when(novasFuncionalidades.retornarVendaContemPromocaoPorID(1)).thenReturn(new VendaContemPromocao(2,1, 2, 3, 0.4, 0.4, 0));
-		when(novasFuncionalidades.retornarVendaContemPromocaoPorID(1)).thenReturn(new VendaContemPromocao(3,1, 6, 3, 1.5, 0.9, 1));
-		when(novasFuncionalidades.retornarVendaContemPromocaoPorID(1)).thenReturn(new VendaContemPromocao(4,2, 1, 3, 0.5, 0.4, 1));
-		when(novasFuncionalidades.retornarVendaContemPromocaoPorID(1)).thenReturn(new VendaContemPromocao(5,2, 7, 3, 19.5, 19.5, 0));
-		when(novasFuncionalidades.retornarVendaContemPromocaoPorID(1)).thenReturn(new VendaContemPromocao(6,3, 7, 1, 19.5, 19.5, 0));
+		when(novasFuncionalidades.retornarVendaContemPromocaoPorID(2)).thenReturn(new VendaContemPromocao(2,1, 2, 3, 0.4, 0.4, 0));
+		when(novasFuncionalidades.retornarVendaContemPromocaoPorID(3)).thenReturn(new VendaContemPromocao(3,1, 6, 3, 1.5, 0.9, 1));
+		when(novasFuncionalidades.retornarVendaContemPromocaoPorID(4)).thenReturn(new VendaContemPromocao(4,2, 1, 3, 0.5, 0.4, 1));
+		when(novasFuncionalidades.retornarVendaContemPromocaoPorID(5)).thenReturn(new VendaContemPromocao(5,2, 7, 3, 19.5, 19.5, 0));
+		when(novasFuncionalidades.retornarVendaContemPromocaoPorID(6)).thenReturn(new VendaContemPromocao(6,3, 7, 1, 19.5, 19.5, 0));
 		
 
 		

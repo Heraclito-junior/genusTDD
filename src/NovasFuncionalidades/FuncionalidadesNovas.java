@@ -702,6 +702,9 @@ public class FuncionalidadesNovas {
 
 	public double calcularTotalDesconto(int i, List<VendaContemPromocao> listaVendaContem) {
 		// TODO Auto-generated method stub
+		
+		
+		
 		throw new UnsupportedOperationException();
 		//return 0;
 	}
