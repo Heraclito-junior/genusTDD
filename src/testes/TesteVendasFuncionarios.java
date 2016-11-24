@@ -79,11 +79,11 @@ public class TesteVendasFuncionarios {
 		when(novasFuncionalidades.retornarVendaPorID(4)).thenReturn( new VendaModificada(4, 1, 0, 8000, new Date(2016,11,16)) );
 		when(novasFuncionalidades.retornarVendaPorID(5)).thenReturn( new VendaModificada(5, 2, 0, 250, new Date(2016,11,16)) );
 		when(novasFuncionalidades.retornarVendaPorID(6)).thenReturn( new VendaModificada(6, 3, 0, 150, new Date(2016,11,16)) );
-		when(novasFuncionalidades.retornarVendaPorID(7)).thenReturn( new VendaModificada(7, 3, 0, 350, new Date(2016,11,16)) );
+		when(novasFuncionalidades.retornarVendaPorID(7)).thenReturn( new VendaModificada(7, 3, 0, 350, new Date(2016,11,17)) );
+		when(novasFuncionalidades.retornarVendaPorID(8)).thenReturn( new VendaModificada(8, 3, 0, 400, new Date(2016,10,17)) );
 		
 		
-		
-		for(int j=1;j<=7 ;j++){
+		for(int j=1;j<=8 ;j++){
 			auxiliarParaAlocacaoVendas=novasFuncionalidades.retornarVendaPorID(j);
 			listaVendas.add(auxiliarParaAlocacaoVendas);
 			
@@ -129,7 +129,7 @@ public class TesteVendasFuncionarios {
     	
     	FuncionarioModificado funcTeste=listaDeFuncionarios.get(2);
     	
-    	valorVenda=novasFuncionalidades.calcularVendasFuncionarioMes(2016, 12, listaVendas,funcTeste);
+    	valorVenda=novasFuncionalidades.calcularVendasFuncionarioMes(2016, 05, listaVendas,funcTeste);
 		
 		
 
@@ -146,11 +146,11 @@ public class TesteVendasFuncionarios {
     	
     	FuncionarioModificado funcTeste=listaDeFuncionarios.get(2);
     	
-    	valorVenda=novasFuncionalidades.calcularVendasFuncionarioDia(2016, 12,16, listaVendas,funcTeste);
+    	valorVenda=novasFuncionalidades.calcularVendasFuncionarioDia(2016, 11,16, listaVendas,funcTeste);
 		
 		
 
-		assertEquals(0, valorVenda,0.001);
+		assertEquals(150, valorVenda,0.001);
 	}
     
 	
@@ -163,11 +163,10 @@ public class TesteVendasFuncionarios {
     	
     	FuncionarioModificado funcTeste=listaDeFuncionarios.get(2);
     	
-    	valorVenda=novasFuncionalidades.calcularVendasFuncionarioDia(2016, 12,17, listaVendas,funcTeste);
+    	valorVenda=novasFuncionalidades.calcularVendasFuncionarioDia(2016, 05,17, listaVendas,funcTeste);
 		
 		
 
-		assertEquals(0, valorVenda,0.001);
 	}
     
     @Test  
@@ -179,11 +178,11 @@ public class TesteVendasFuncionarios {
        	
        	FuncionarioModificado funcTeste=listaDeFuncionarios.get(2);
        	
+       	
        	valorVenda=novasFuncionalidades.calcularVendasFuncionarioAno(2016, listaVendas,funcTeste);
    		
-   		
 
-   		assertEquals(0, valorVenda,0.001);
+   		assertEquals(900, valorVenda,0.001);
    	}
        
    	
@@ -194,13 +193,11 @@ public class TesteVendasFuncionarios {
        	FuncionalidadesNovas novasFuncionalidades=new FuncionalidadesNovas();
        	double valorVenda=0;
        	
-       	FuncionarioModificado funcTeste=listaDeFuncionarios.get(3);
-       	
-       	valorVenda=novasFuncionalidades.calcularVendasFuncionarioAno(2016, listaVendas,funcTeste);
+       	FuncionarioModificado funcTeste=listaDeFuncionarios.get(2);
+       	valorVenda=novasFuncionalidades.calcularVendasFuncionarioAno(2015, listaVendas,funcTeste);
    		
    		
 
-   		assertEquals(0, valorVenda,0.001);
    	}
      
 

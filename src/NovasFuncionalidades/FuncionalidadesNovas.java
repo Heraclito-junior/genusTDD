@@ -16,6 +16,9 @@ import java.util.Date;
 import java.util.List;
 
 import exception.FuncionarioNaoTrabalhaDiaException;
+import exception.NenhumaVendaAnoException;
+import exception.NenhumaVendaDiaException;
+import exception.NenhumaVendaMesException;
 import exception.ProdutoInexistenteException;
 import genus.Tipos.Fatura;
 import genus.Tipos.Produto;
@@ -82,6 +85,13 @@ public class FuncionalidadesNovas {
 		
 	}
 	
+	public VendaContemPromocao retornarVendaContemPromocaoPorID(int idVendaContem){
+		
+		throw new UnsupportedOperationException();
+		
+		
+	}
+	
 	public Produto calcularDescontoProduto(Produto produtoParaCalcular,List<Desconto> listaDeDescontosParaCalcular,List<Produto> listaEstoque){
 		
 		Produto produtoRetornado=new Produto();
@@ -128,7 +138,8 @@ public class FuncionalidadesNovas {
 	
 	
 	
-	public List<VendaContemPromocao> setarVendaContem(VendaModificada novaVenda,List<Desconto> listaDescontos){
+	public List<VendaContemPromocao> setarVendaContem(VendaModificada novaVenda,List<Desconto> listaDescontos, int sz){
+		
 		List<VendaContemPromocao> novoVendaContem=new ArrayList<VendaContemPromocao>();
 		List<Produto> carrinho=new ArrayList<Produto>();
 		List<Produto> estoque=new ArrayList<Produto>();
@@ -160,7 +171,7 @@ public class FuncionalidadesNovas {
 				}
 				
 				double precoNormal=estoque.get(interador).getPreco();
-				novoVendaContem.add(new VendaContemPromocao(novaVenda.getIDvenda(), carrinho.get(i).getIDproduto(), novaVenda.getQuantidadeDeProdutos().get(i), precoNormal, precoNormal, 0));
+				novoVendaContem.add(new VendaContemPromocao(sz,novaVenda.getIDvenda(), carrinho.get(i).getIDproduto(), novaVenda.getQuantidadeDeProdutos().get(i), precoNormal, precoNormal, 0));
 			}else{
 				int interador=-1;
 				
@@ -172,7 +183,7 @@ public class FuncionalidadesNovas {
 				double precoNormal=estoque.get(interador).getPreco();
 				
 				
-				novoVendaContem.add(new VendaContemPromocao(novaVenda.getIDvenda(), carrinho.get(i).getIDproduto(), novaVenda.getQuantidadeDeProdutos().get(i), precoNormal,carrinho.get(i).getPreco() ,idDaPromocao));
+				novoVendaContem.add(new VendaContemPromocao(sz,novaVenda.getIDvenda(), carrinho.get(i).getIDproduto(), novaVenda.getQuantidadeDeProdutos().get(i), precoNormal,carrinho.get(i).getPreco() ,idDaPromocao));
 			}
 			
 			
@@ -287,9 +298,7 @@ public class FuncionalidadesNovas {
 		
 		
 		
-		for(int i=0;i<listaFiltrada.size();i++){
-			
-		}
+		
 		
 		
 		String diasTrabalho=func.getDiasTrabalho();
@@ -433,6 +442,8 @@ public class FuncionalidadesNovas {
 		
 		int anoVenda;
 		int anoMes;
+		int interacao=0;
+
 		
 
 		for(int i=0;i<listaVendas2.size();i++){
@@ -441,9 +452,15 @@ public class FuncionalidadesNovas {
 			
 			if(anoVenda==ano && anoMes==mes){
 				valorTotal+=listaVendas2.get(i).getValorTotal();
+				interacao++;
+
 			}
 			
 			
+		}
+		
+		if(interacao==0){
+			throw new NenhumaVendaMesException();
 		}
 		
 		return valorTotal;
@@ -533,38 +550,119 @@ public class FuncionalidadesNovas {
 
 	public double calcularVendasFuncionarioMes(int ano, int mes, List<VendaModificada> listaVendas,
 			FuncionarioModificado funcTeste) {
-		// TODO Auto-generated method stub
-		
+		int anoVenda;
+		int mesVenda;
+		int interacao=0;
 
 		
+		double total=0;
+		for(int i=0;i<listaVendas.size();i++){
+			anoVenda=listaVendas.get(i).getDataVenda().getYear();
+			mesVenda=listaVendas.get(i).getDataVenda().getMonth();
+			
+			if(ano==anoVenda && mesVenda==mes && listaVendas.get(i).IDvendedor==funcTeste.idFunc){
+				total+=listaVendas.get(i).getValorTotal();
+				interacao++;
+
+			}
+
+		}
+		total=truncarValor(total);
 		
-		
-		throw new UnsupportedOperationException();
-		//return 0;
+		if(interacao==0){
+			throw new NenhumaVendaMesException();
+		}
+
+		return total;
 	}
 
 
 	public double calcularVendasFuncionarioDia(int ano, int mes, int dia, List<VendaModificada> listaVendas,
 			FuncionarioModificado funcTeste) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException();
+		
+		int anoVenda;
+		int mesVenda;
+		int diaVenda;
+		int interacao=0;
+		
+		double total=0;
+		
+		for(int i=0;i<listaVendas.size();i++){
+			
+			anoVenda=listaVendas.get(i).getDataVenda().getYear();
+			mesVenda=listaVendas.get(i).getDataVenda().getMonth();
+			diaVenda=listaVendas.get(i).getDataVenda().getDate();
+			if(ano==anoVenda && mesVenda==mes &&diaVenda==dia && listaVendas.get(i).IDvendedor==funcTeste.idFunc){
+				total+=listaVendas.get(i).getValorTotal();
+				interacao++;
+			}
+			
+		}
+		total=truncarValor(total);
 
-		//return 0;
+		
+		if(interacao==0){
+			throw new NenhumaVendaDiaException();
+		}
+
+		return total;
 	}
 
 
 	public double calcularVendasFuncionarioAno(int ano, List<VendaModificada> listaVendas,
 			FuncionarioModificado funcTeste) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException();
+		
+		int anoVenda;
+		int interacao=0;
 
-		//return 0;
+		
+		double total=0;
+		
+		for(int i=0;i<listaVendas.size();i++){
+			
+			anoVenda=listaVendas.get(i).getDataVenda().getYear();
+			
+			if(ano==anoVenda && listaVendas.get(i).IDvendedor==funcTeste.idFunc){
+				total+=listaVendas.get(i).getValorTotal();
+				interacao++;
+			}
+			
+		}
+		total=truncarValor(total);
+
+		
+		if(interacao==0){
+			throw new NenhumaVendaAnoException();
+		}
+
+		return total;
 	}
 
 
 	public double calcularVendasAno(int ano, List<VendaModificada> listaVendas) {
 		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException();
+		
+		double valorTotal=0;
+		
+		int anoVenda;
+		
+
+		for(int i=0;i<listaVendas.size();i++){
+			anoVenda=listaVendas.get(i).getDataVenda().getYear();
+			
+			if(anoVenda==ano){
+				valorTotal+=listaVendas.get(i).getValorTotal();
+			}
+			
+			
+		}
+		
+		if(valorTotal==0){
+			throw new NenhumaVendaAnoException();
+		}
+		
+		return valorTotal;
+		
 
 		//return 0;
 	}
@@ -572,22 +670,46 @@ public class FuncionalidadesNovas {
 
 	public double calcularVendasDia(int ano, int mes, int dia, List<VendaModificada> listaVendas) {
 		// TODO Auto-generated method stub
+		//throw new UnsupportedOperationException();
+		
+		double valorTotal=0;
+		
+		int anoVenda;
+		int anoMes;
+		int diaVenda;
+
+		for(int i=0;i<listaVendas.size();i++){
+			anoVenda=listaVendas.get(i).getDataVenda().getYear();
+			anoMes=listaVendas.get(i).getDataVenda().getMonth();
+			diaVenda=listaVendas.get(i).getDataVenda().getDate();
+			if(anoVenda==ano && anoMes==mes && diaVenda==dia){
+				valorTotal+=listaVendas.get(i).getValorTotal();
+			}
+			
+			
+		}
+		
+		if(valorTotal==0){
+			throw new NenhumaVendaDiaException();
+		}
+		
+		return valorTotal;
+		
+		
+
+	}
+
+
+	public double calcularTotalDesconto(int i, List<VendaContemPromocao> listaVendaContem) {
+		// TODO Auto-generated method stub
 		throw new UnsupportedOperationException();
-
 		//return 0;
-	} 
+	}
 
 
-	
-
-
-	
-
-
-	
-	
-
-	
-	
-	
+	public double calcularTotalDescontoVenda(int i, List<VendaContemPromocao> listaVendaContem) {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException();
+		//return 0;
+	}
 }

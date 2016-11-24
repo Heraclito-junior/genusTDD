@@ -2,7 +2,8 @@ package NovasFuncionalidades;
 
 public class VendaContemPromocao {
 	
-	  public VendaContemPromocao(int IDvenda, int IDproduto, double quantidade,double precoNormal,double precoDesconto,int codigoPromocional) {
+	  public VendaContemPromocao(int ID2, int IDvenda, int IDproduto, double quantidade,double precoNormal,double precoDesconto,int codigoPromocional) {
+		  	ID=ID2;
 	        this.IDvenda = IDvenda;
 	        this.IDproduto = IDproduto;
 	        this.quantidade = quantidade;
@@ -10,6 +11,7 @@ public class VendaContemPromocao {
 	        this.precoDesconto=precoDesconto;
 	        this.codigoPromocional=codigoPromocional;
 	    }
+	  	int ID;
 	    int IDvenda;
 	    int IDproduto;
 	    double quantidade;
@@ -54,5 +56,11 @@ public class VendaContemPromocao {
 		}
 		public void setCodigoPromocional(int codigoPromocional) {
 			this.codigoPromocional = codigoPromocional;
+		}
+		public int getID() {
+			return ID;
+		}
+		public void setID(int iD) {
+			ID = iD;
 		}
 }

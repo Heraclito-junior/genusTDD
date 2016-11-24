@@ -141,7 +141,7 @@ public class TesteBalacoMes {
     	FuncionalidadesNovas novasFuncionalidades=new FuncionalidadesNovas();
     	double valorVenda=0;
     	
-    	valorVenda=novasFuncionalidades.calcularVendasMes(2016, 11, listaVendas);
+    	valorVenda=novasFuncionalidades.calcularVendasMes(2016, 05, listaVendas);
 		
 		
 

@@ -509,7 +509,7 @@ public class TestePromocoes {
 		assertEquals(vendaTestaFinal.getValorTotal(),52.2,0.001);
 		
 		
-		vendaContem=funcionalidadesTeste.setarVendaContem(vendaTestaFinal, listaDeDescontos);
+		vendaContem=funcionalidadesTeste.setarVendaContem(vendaTestaFinal, listaDeDescontos,vendaContem.size());
 		
 		assertEquals(vendaContem.size(),2);
 		

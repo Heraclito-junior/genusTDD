@@ -370,6 +370,14 @@ public class VendaModificadaLotes {
 		this.lotes = lotes;
 	}
 
+	public int getIDvendedor() {
+		return IDvendedor;
+	}
+
+	public void setIDvendedor(int iDvendedor) {
+		IDvendedor = iDvendedor;
+	}
+
 	
 
     
